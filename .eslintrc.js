@@ -1,18 +1,23 @@
 /** @format */
 
 module.exports = {
+	env: {
+		'react-native/react-native': true,
+	},
 	extends: [
 		'@react-native-community',
-		'eslint:recommended',
+		'eslint:all',
+		'plugin:react/all',
+		'plugin:react-native/all',
 		'plugin:prettier/recommended',
 	],
+	parserOptions: {
+		ecmaFeatures: {
+			jsx: true,
+		},
+	},
 	root: true,
 	rules: {
 		'prettier/prettier': 'error',
-		'react-native/no-color-literals': 'error',
-		'react-native/no-inline-styles': 'error',
-		'react-native/no-raw-text': 'error',
-		'react-native/no-unused-styles': 'error',
-		'react-native/split-platform-components': 'warn',
 	},
 }
