@@ -1,5 +1,5 @@
 /** @format */
 
 module.exports = {
-  '**/*.js?(x)': ['eslint --fix', 'git add'],
-};
+	'**/*.js?(x)': ['eslint --fix', 'git add'],
+}

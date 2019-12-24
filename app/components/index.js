@@ -1,1 +1,3 @@
-export {PlatformIcon} from './platform-icon';
+/** @format */
+
+export { PlatformIcon } from './platform-icon'

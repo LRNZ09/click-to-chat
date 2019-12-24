@@ -4,7 +4,7 @@ import { AppRegistry, Platform } from 'react-native'
 import QuickActions from 'react-native-quick-actions'
 import { enableScreens } from 'react-native-screens'
 
-import { Providers } from './providers'
+import { Root } from './root'
 
 QuickActions.isSupported((error, isNativeSupported) => {
 	if (error) {
@@ -41,4 +41,4 @@ QuickActions.isSupported((error, isNativeSupported) => {
 
 enableScreens()
 
-AppRegistry.registerComponent('WhatsAdd', () => Providers)
+AppRegistry.registerComponent('WhatsAdd', () => Root)

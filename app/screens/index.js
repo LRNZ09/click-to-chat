@@ -1,3 +1,3 @@
 /** @format */
 
-export * from './Welcome';
+export * from './welcome'

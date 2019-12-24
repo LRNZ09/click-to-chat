@@ -1,3 +1,3 @@
 /** @format */
 
-export { Root } from './root'
+export { Stack } from './stack'
