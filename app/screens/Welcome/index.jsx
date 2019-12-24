@@ -14,17 +14,17 @@ import axios from 'axios'
 import _ from 'lodash'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import {
+	ActivityIndicator,
+	Animated,
 	Button,
 	DeviceEventEmitter,
+	Linking,
 	Platform,
 	ScrollView,
 	StyleSheet,
 	Text,
 	TextInput,
 	View,
-	Animated,
-	ActivityIndicator,
-	Linking,
 } from 'react-native'
 import { RectButton, BorderlessButton } from 'react-native-gesture-handler'
 import { useClipboard } from 'react-native-hooks'
