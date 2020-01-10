@@ -1,39 +1,40 @@
-/** @format */
-
 import { AppRegistry, Platform } from 'react-native'
 import QuickActions from 'react-native-quick-actions'
 import { enableScreens } from 'react-native-screens'
 
 import { Root } from './root'
 
+const ANDROID_NOUGAT_PLATFORM_VERSION = 25
+const IOS_YUKON_PLATFORM_VERSION = 13
+
+const IS_PLATFORM_SUPPORTED = Platform.select({
+	// Support from Android Nougat
+	android: Platform.Version >= ANDROID_NOUGAT_PLATFORM_VERSION,
+	// Support from iOS 13 without 3D Touch
+	ios: Number.parseInt(Platform.Version) >= IOS_YUKON_PLATFORM_VERSION,
+})
+
 QuickActions.isSupported((error, isNativeSupported) => {
 	if (error) {
-		console.error(error)
+		console.warn(error)
+
 		return
 	}
 
-	if (!isNativeSupported) {
-		const isPlatformSupported = Platform.select({
-			android: Platform.Version >= 25, // Support from Nougat
-			ios: parseInt(Platform.Version, 10) >= 13, // Support from iOS 13 without 3D Touch
-		})
+	if (!isNativeSupported && !IS_PLATFORM_SUPPORTED) {
+		console.log('Device does not support 3D Touch or 3D Touch is disabled.')
 
-		if (!isPlatformSupported) {
-			console.log(
-				'Device does not support 3D Touch or 3D Touch is disabled.',
-			)
-			return
-		}
+		return
 	}
 
 	QuickActions.setShortcutItems([
 		{
-			type: 'donate', // Required
-			title: 'Donate', // Optional, if empty, `type` will be used instead
+			icon: 'Love',
 			subtitle: 'Thanks for you support',
-			icon: 'Love', // Icons instructions below
+			title: 'Donate',
+			type: 'donate',
 			userInfo: {
-				url: '/donate', // Provide any custom data like deep linking URL
+				url: '/donate',
 			},
 		},
 	])

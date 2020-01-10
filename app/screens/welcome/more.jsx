@@ -1,5 +1,3 @@
-/** @format */
-
 import { useActionSheet } from '@expo/react-native-action-sheet'
 import React, { useCallback } from 'react'
 import { Alert, Platform } from 'react-native'
@@ -19,26 +17,27 @@ const More = () => {
 
 		showActionSheetWithOptions(
 			{
-				options: ['Donate', 'About', 'Cancel'],
 				cancelButtonIndex: 2,
-				title: 'Show Action Sheet With Options Title',
 				message: 'showActionSheetWithOptions Message',
+				options: ['Donate', 'About', 'Cancel'],
+				title: 'Show Action Sheet With Options Title',
 			},
 			onActionSheetOptionPress,
 		)
 	}, [onActionSheetOptionPress, showActionSheetWithOptions])
 
 	return (
-		<>
-			<BorderlessButton
-				style={Platform.select({
-					android: { marginStart: 24, marginEnd: 16, padding: 6 },
-				})}
-				onPress={onPress}
-			>
-				<PlatformIcon name="more" size={24} />
-			</BorderlessButton>
-		</>
+		<BorderlessButton
+			onPress={onPress}
+			style={Platform.select({
+				android: { marginEnd: 16, marginStart: 24, padding: 6 },
+			})}
+		>
+			<PlatformIcon
+				name="more"
+				size={24}
+			/>
+		</BorderlessButton>
 	)
 }
 

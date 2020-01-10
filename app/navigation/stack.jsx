@@ -1,14 +1,11 @@
-/** @format */
-
 import _ from 'lodash'
-import { useActionSheet } from '@expo/react-native-action-sheet'
 import {
-	DefaultTheme,
 	DarkTheme,
+	DefaultTheme,
 	NavigationNativeContainer,
 } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import React, { useCallback } from 'react'
+import React from 'react'
 import { useColorScheme } from 'react-native-appearance'
 
 import * as screens from '../screens'
@@ -22,28 +19,29 @@ const NativeStack = createNativeStackNavigator()
 
 const getThemeFromColorScheme = (colorScheme) => {
 	if (colorScheme === 'dark') return DarkTheme
+
 	return DefaultTheme
 }
 
+const renderScreen = (screenComponent) => (
+	<NativeStack.Screen
+		component={screenComponent}
+		name={screenComponent.name.toLowerCase()}
+		options={screenComponent.options}
+	/>
+)
+
 const Stack = () => {
 	const colorScheme = useColorScheme()
+
 	const theme = getThemeFromColorScheme(colorScheme)
 
-	const renderScreen = useCallback(
-		(screenComponent) => (
-			<NativeStack.Screen
-				component={screenComponent}
-				name={screenComponent.name.toLowerCase()}
-				options={screenComponent.options}
-			/>
-		),
-		[],
-	)
+	const children = _.map(screens, renderScreen)
 
 	return (
 		<NavigationNativeContainer theme={theme}>
 			<NativeStack.Navigator screenOptions={SCREEN_OPTIONS}>
-				{_.map(screens, renderScreen)}
+				{children}
 			</NativeStack.Navigator>
 		</NavigationNativeContainer>
 	)

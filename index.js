@@ -1,5 +1,1 @@
-/**
- * @format
- */
-
 import './app'

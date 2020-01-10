@@ -294,6 +294,7 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = WP9M4LREN6;
+						ProvisioningStyle = Automatic;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -717,6 +718,8 @@
 			baseConfigurationReference = B4440CB4D4BD3A9DC37C65B5 /* Pods-WhatsAdd.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = WP9M4LREN6;
@@ -729,6 +732,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = dev.lorenzopieri.whatsadd;
 				PRODUCT_NAME = WhatsAdd;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -739,6 +743,8 @@
 			baseConfigurationReference = 27811D7D7D8BCB4AACD6C0C8 /* Pods-WhatsAdd.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = WP9M4LREN6;
 				INFOPLIST_FILE = WhatsAdd/Info.plist;
@@ -750,6 +756,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = dev.lorenzopieri.whatsadd;
 				PRODUCT_NAME = WhatsAdd;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};

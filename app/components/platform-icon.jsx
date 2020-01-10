@@ -1,9 +1,7 @@
-/** @format */
-
-import { useTheme } from '@react-navigation/native'
 import React from 'react'
-import { Platform } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
+import { useTheme } from '@react-navigation/native'
+import { Platform } from 'react-native'
 
 Icon.loadFont()
 
@@ -15,7 +13,13 @@ const PlatformIcon = ({ name, ...props }) => {
 		ios: `ios-${name}`,
 	})
 
-	return <Icon color={theme.colors.text} {...props} name={platformName} />
+	return (
+		<Icon
+			color={theme.colors.text}
+			// eslint-disable-next-line react/jsx-props-no-spreading
+			{...props}
+			name={platformName}
+		/>)
 }
 
 export { PlatformIcon }

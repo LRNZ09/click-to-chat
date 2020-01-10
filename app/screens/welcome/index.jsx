@@ -1,21 +1,10 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * Generated with the TypeScript template
- * https://github.com/react-native-community/react-native-template-typescript
- *
- * @format
- */
-
 import { Picker } from '@react-native-community/picker'
 import { useTheme } from '@react-navigation/native'
 import axios from 'axios'
 import _ from 'lodash'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
 	ActivityIndicator,
-	Animated,
 	Button,
 	DeviceEventEmitter,
 	Linking,
@@ -26,35 +15,43 @@ import {
 	TextInput,
 	View,
 } from 'react-native'
-import { RectButton, BorderlessButton } from 'react-native-gesture-handler'
-import { useClipboard } from 'react-native-hooks'
+import { BorderlessButton, RectButton } from 'react-native-gesture-handler'
 import * as RNLocalize from 'react-native-localize'
-import QuickActions from 'react-native-quick-actions'
 import RNRestart from 'react-native-restart'
-import { conformToMask } from 'text-mask-core'
-import Modal from 'react-native-modal'
 import { human } from 'react-native-typography'
+import { conformToMask } from 'text-mask-core'
 
-import { More } from './more'
 import { PlatformIcon } from '../../components'
 
-const BASE_TEXT_INPUT_MASK = _.initial(
-	_.flatten(_.times(5, _.constant([/\d/, /\d/, /\d/, ' ']))),
-)
+import { More } from './more'
+
+const getBaseTextInputMask = () => {
+	const numbers = Array.from({ length: 3 }, () => /\d/u)
+
+	const space = ' '
+
+	const mask = Array.from({ length: 5 }, () => [...numbers, space])
+		.flat()
+
+	mask.pop()
+
+	return mask
+}
+
+const BASE_TEXT_INPUT_MASK = getBaseTextInputMask()
 
 const UNICODE_BASE = 127462 - 'A'.charCodeAt()
 
-DeviceEventEmitter.addListener('quickActionShortcut', (data) => {
-	// console.warn({ data })
+DeviceEventEmitter.addListener('quickActionShortcut', (/* data */) => {
+	// Console.warn({ data })
 })
 
 const renderHeaderRight = () => <More />
 
+const getCodePointFromChar = (char) => UNICODE_BASE + char.charCodeAt()
+
 const getFlagFromAlpha2Code = (alpha2Code) => {
-	const codePoints = _.map(
-		alpha2Code,
-		(char) => UNICODE_BASE + char.charCodeAt(),
-	)
+	const codePoints = _.map(alpha2Code, getCodePointFromChar)
 
 	return String.fromCodePoint(...codePoints)
 }
@@ -62,6 +59,7 @@ const getFlagFromAlpha2Code = (alpha2Code) => {
 const getLabelFromCountry = (country) => {
 	const flag = getFlagFromAlpha2Code(country.alpha2Code)
 
+	// eslint-disable-next-line no-irregular-whitespace
 	return `${country.nativeName} ${flag}`
 }
 
@@ -80,23 +78,61 @@ const CountryPickerItem = (country) => {
 const fetchCountriesData = async () => {
 	try {
 		const response = await axios.get('https://restcountries.eu/rest/v2/all')
+
 		return response.data
 	} catch (error) {
 		console.warn(error)
 	}
 }
 
+const styles = StyleSheet.create({
+	container: {
+		borderBottomWidth: StyleSheet.hairlineWidth,
+		borderTopWidth: StyleSheet.hairlineWidth,
+		marginHorizontal: -16,
+	},
+	countryButton: {
+		flexDirection: 'row',
+		padding: 16,
+	},
+	countryContainer: {
+		flex: 1,
+		flexDirection: 'row',
+		justifyContent: 'flex-end',
+	},
+	countryText: {
+		marginEnd: 16,
+	},
+	scrollContainer: {
+		padding: 16,
+	},
+	separator: {
+		borderBottomWidth: StyleSheet.hairlineWidth,
+		marginStart: 16,
+	},
+	textInput: { flex: 1 },
+	textInputContainer: {
+		flexDirection: 'row',
+		padding: 16,
+	},
+	textInputLabel: { marginEnd: 16 },
+})
+
 const Form = () => {
 	const theme = useTheme()
 
 	const [countries, setCountries] = useState([])
+
 	const [isPickerVisible, setPickerVisible] = useState(false)
+
 	const [phoneNumber, setPhoneNumber] = useState('')
+
 	const [selectedCountry, setSelectedCountry] = useState(null)
 
 	const onCountryValueChange = useCallback(
 		(alpha2Code) => {
 			const country = _.find(countries, { alpha2Code })
+
 			setPhoneNumber(`+${country.callingCodes[0]}`)
 			setSelectedCountry(country)
 		},
@@ -104,23 +140,25 @@ const Form = () => {
 	)
 
 	useEffect(() => {
-		fetchCountriesData().then(setCountries)
+		fetchCountriesData()
+			.then(setCountries)
 	}, [])
 
 	useEffect(() => {
 		if (_.isEmpty(countries)) return
 
 		const initialCountry = RNLocalize.getCountry()
+
 		onCountryValueChange(initialCountry)
-	}, [countries])
+	}, [countries, onCountryValueChange])
 
-	// useEffect(() => {
-	// 	QuickActions.popInitialAction()
-	// 		.then(console.warn)
-	// 		.catch(console.error)
-	// }, [])
+	/* UseEffect(() => {
+	   	QuickActions.popInitialAction()
+	   		.then(console.warn)
+	   		.catch(console.error)
+	   }, []) */
 
-	// const [data] = useClipboard()
+	// Const [data] = useClipboard()
 
 	const onChangeText = useCallback(
 		(value) => {
@@ -136,6 +174,7 @@ const Form = () => {
 					guide: false,
 					previousConformedValue,
 				})
+
 				return conformedValue
 			})
 		},
@@ -145,20 +184,19 @@ const Form = () => {
 	const onOpenPress = useCallback(() => {
 		const url = `whatsapp://send?phone=${phoneNumber}`
 
-		Linking.openURL(url, {
-			appName: 'WhatsApp',
-			appStoreId: '310633997',
-			appStoreLocale: RNLocalize.getLocales()[0].languageCode,
-			playStoreId: 'com.whatsapp',
-		})
-			.then(() => {
-				// do stuff
-				console.warn('ok?')
-			})
-			.catch((err) => {
-				console.warn(err)
-			})
+		/* {
+		   	appName: 'WhatsApp',
+		   	appStoreId: '310633997',
+		   	appStoreLocale: RNLocalize.getLocales()[0].languageCode,
+		   	playStoreId: 'com.whatsapp',
+		   } */
+
+		Linking.openURL(url)
 	}, [phoneNumber])
+
+	const onCountryPress = useCallback(() => {
+		setPickerVisible((prevState) => !prevState)
+	}, [])
 
 	if (!selectedCountry) return <ActivityIndicator size="large" />
 
@@ -176,25 +214,19 @@ const Form = () => {
 							android: 'transparent',
 							ios: theme.colors.card,
 						}),
-						borderTopColor: theme.colors.border,
 						borderBottomColor: theme.colors.border,
+						borderTopColor: theme.colors.border,
 					},
 				]}
 			>
 				<RectButton
-					onPress={() => {
-						setPickerVisible((prevState) => !prevState)
-					}}
-					style={[styles.countryContainer]}
+					onPress={onCountryPress}
+					style={styles.countryButton}
 				>
-					<Text style={{ color: theme.colors.text }}>Country</Text>
-					<View
-						style={{
-							flex: 1,
-							flexDirection: 'row',
-							justifyContent: 'flex-end',
-						}}
-					>
+					<Text style={{ color: theme.colors.text }}>
+						Country
+					</Text>
+					<View style={styles.countryContainer}>
 						<Text
 							style={[
 								styles.countryText,
@@ -213,9 +245,9 @@ const Form = () => {
 
 				{isPickerVisible && (
 					<Picker
-						selectedValue={selectedCountry.alpha2Code}
 						isVisible={isPickerVisible}
 						onValueChange={onCountryValueChange}
+						selectedValue={selectedCountry.alpha2Code}
 					>
 						{_.map(countries, CountryPickerItem)}
 					</Picker>
@@ -228,7 +260,7 @@ const Form = () => {
 					]}
 				/>
 
-				<View style={[styles.textInputContainer]}>
+				<View style={styles.textInputContainer}>
 					<Text
 						style={[
 							styles.textInputLabel,
@@ -238,17 +270,16 @@ const Form = () => {
 						Phone number
 					</Text>
 					<TextInput
-						blurOnSubmit
-						enablesReturnKeyAutomatically
 						autoCompleteType="tel"
-						// defaultValue={data}
+						blurOnSubmit
 						clearButtonMode="while-editing"
+						enablesReturnKeyAutomatically
 						keyboardType="phone-pad"
+						onChangeText={onChangeText}
 						placeholder={placeholder}
 						placeholderTextColor={Platform.select({
 							android: theme.colors.text,
 						})}
-						onChangeText={onChangeText}
 						returnKeyType="done"
 						style={styles.textInput}
 						textContentType="telephoneNumber"
@@ -260,7 +291,6 @@ const Form = () => {
 
 			<BorderlessButton
 				onPress={onOpenPress}
-				style={{ margin: 16, alignSelf: 'center' }}
 			>
 				<Text style={[human.callout, { color: theme.colors.primary }]}>
 					Open In WhatsApp
@@ -270,8 +300,9 @@ const Form = () => {
 	)
 }
 
-const Welcome = ({ ...props }) => {
+const Welcome = () => {
 	const onRestartPress = useCallback(() => {
+		// eslint-disable-next-line new-cap
 		RNRestart.Restart()
 	}, [])
 
@@ -282,45 +313,17 @@ const Welcome = ({ ...props }) => {
 		>
 			<Form />
 
-			<Button title="Restart" onPress={onRestartPress} />
+			<Button
+				onPress={onRestartPress}
+				title="Restart"
+			/>
 		</ScrollView>
 	)
 }
 
 Welcome.options = {
-	title: 'WhatsAdd',
 	headerRight: renderHeaderRight,
+	title: 'WhatsAdd',
 }
-
-const styles = StyleSheet.create({
-	scrollContainer: {
-		padding: 16,
-	},
-	picker: {
-		marginHorizontal: -16,
-	},
-	container: {
-		marginHorizontal: -16,
-		borderTopWidth: StyleSheet.hairlineWidth,
-		borderBottomWidth: StyleSheet.hairlineWidth,
-	},
-	countryContainer: {
-		flexDirection: 'row',
-		padding: 16,
-	},
-	countryText: {
-		marginEnd: 16,
-	},
-	separator: {
-		borderBottomWidth: StyleSheet.hairlineWidth,
-		marginStart: 16,
-	},
-	textInputContainer: {
-		flexDirection: 'row',
-		padding: 16,
-	},
-	textInputLabel: { marginEnd: 16 },
-	textInput: { flex: 1 },
-})
 
 export { Welcome }
