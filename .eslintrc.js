@@ -1,47 +1,40 @@
+/** @format */
+
 module.exports = {
 	env: {
+		es6: true,
+		node: true,
 		'react-native/react-native': true,
 	},
 	extends: [
-		'@lrnz09',
-		'plugin:react/all',
+		'eslint:recommended',
+		'plugin:react/recommended',
 		'plugin:react-native/all',
-		'plugin:import/recommended',
-		'plugin:import/react',
-		'plugin:import/react-native',
-		'plugin:import/typescript',
+		'plugin:prettier/recommended',
+		'prettier',
+		'prettier/babel',
+		'prettier/react',
 	],
+	globals: {
+		Atomics: 'readonly',
+		SharedArrayBuffer: 'readonly',
+	},
+	parser: 'babel-eslint',
+	parserOptions: {
+		ecmaFeatures: {
+			impliedStrict: true,
+			jsx: true,
+		},
+		ecmaVersion: 2020,
+		sourceType: 'module',
+	},
+	plugins: ['react', 'react-hooks', 'react-native', 'prettier'],
 	root: true,
 	rules: {
-		// Import
-		'import/order': [
-			'error',
-			{
-				// alphabetize: { order: 'asc' },
-				'newlines-between': 'always'
-			},
-		],
-
-		// React
-		'react/prop-types': 'off',
-		'react/no-multi-comp': ['warn', { ignoreStateless: true }],
-		'react/jsx-max-depth': ['warn', { max: 5 }],
-		'react/jsx-indent': [
-			'error',
-			'tab',
-			{ checkAttributes: true, indentLogicalExpressions: true },
-		],
-		'react/jsx-indent-props': ['error', 'tab'],
-
-		// React Native
-		// * FIXME false positive for style prop on RN
-		'react/forbid-component-props': ['warn', { forbid: ['className'] }],
+		'react-hooks/rules-of-hooks': 'error',
+		'react-hooks/exhaustive-deps': 'warn',
 	},
 	settings: {
-		'import/ignore': [
-			'@react-native-community/picker',
-			'react-native-gesture-handler',
-		],
 		react: {
 			version: 'detect',
 		},

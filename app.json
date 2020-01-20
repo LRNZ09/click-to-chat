@@ -1,0 +1,28 @@
+{
+	"expo": {
+		"assetBundlePatterns": ["**/*"],
+		"icon": "./src/assets/icon.png",
+		"ios": {
+			"supportsTablet": true
+		},
+		"name": "WhatsAdd",
+		"orientation": "portrait",
+		"packagerOpts": {
+			"sourceExts": ["js", "json", "jsx", "ts", "tsx"]
+		},
+		"platforms": ["android", "ios", "web"],
+		"privacy": "public",
+		"sdkVersion": "36.0.0",
+		"slug": "whatsadd",
+		"splash": {
+			"backgroundColor": "#ffffff",
+			"image": "./src/assets/splash.png",
+			"resizeMode": "contain"
+		},
+		"updates": {
+			"fallbackToCacheTimeout": 0
+		},
+		"userInterfaceStyle": "automatic",
+		"version": "1.0.0"
+	}
+}
