@@ -16,6 +16,7 @@
 		"@react-navigation/native-stack": "^5.0.0-alpha.24",
 		"axios": "^0.19.1",
 		"expo": "~36.0.0",
+		"expo-ads-facebook": "~8.0.0",
 		"expo-localization": "~8.0.0",
 		"lodash": "^4.17.15",
 		"prop-types": "^15.7.2",
@@ -30,11 +31,14 @@
 		"react-native-screens": "2.0.0-alpha.12",
 		"react-native-typography": "^1.4.1",
 		"react-native-web": "~0.11.7",
+		"sentry-expo": "^2.0.1",
+		"styled-components": "^5.0.0",
 		"text-mask-core": "^5.1.2"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.8.3",
 		"babel-eslint": "^10.0.3",
+		"babel-plugin-styled-components": "^1.10.6",
 		"babel-preset-expo": "~8.0.0",
 		"eslint": "^6.8.0",
 		"eslint-config-prettier": "^6.9.0",

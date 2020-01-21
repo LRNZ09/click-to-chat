@@ -2,6 +2,7 @@
 
 import { useTheme } from '@react-navigation/native'
 import axios from 'axios'
+import * as FacebookAds from 'expo-ads-facebook'
 import _ from 'lodash'
 import React, { useCallback, useEffect, useState } from 'react'
 import {
@@ -18,12 +19,18 @@ import {
 	Picker,
 } from 'react-native'
 import { BorderlessButton, RectButton } from 'react-native-gesture-handler'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { human } from 'react-native-typography'
+import styled from 'styled-components/native'
 import { conformToMask } from 'text-mask-core'
 
 import { PlatformIcon } from '../../components/platform-icon'
 
 import { More } from './more'
+
+const ThemedText = styled.Text(({ theme }) => ({
+	color: theme.colors.text,
+}))
 
 const getBaseTextInputMask = () => {
 	const numbers = Array.from({ length: 3 }, () => /\d/u)
@@ -213,7 +220,7 @@ const Form = () => {
 				]}
 			>
 				<RectButton onPress={onCountryPress} style={styles.countryButton}>
-					<Text style={{ color: theme.colors.text }}>Country</Text>
+					<ThemedText>Country</ThemedText>
 					<View style={styles.countryContainer}>
 						<Text style={[styles.countryText, { color: theme.colors.border }]}>
 							{countryText}
@@ -234,9 +241,7 @@ const Form = () => {
 				<View style={[styles.separator, { borderBottomColor: theme.colors.border }]} />
 
 				<View style={styles.textInputContainer}>
-					<Text style={[styles.textInputLabel, { color: theme.colors.text }]}>
-						Phone number
-					</Text>
+					<ThemedText style={styles.textInputLabel}>Phone number</ThemedText>
 					<TextInput
 						autoCompleteType="tel"
 						blurOnSubmit
@@ -266,10 +271,49 @@ const Form = () => {
 	)
 }
 
+const adsManager = new FacebookAds.NativeAdsManager('763053297519162_763065954184563', 1)
+const { AdIconView, AdMediaView, AdTriggerView } = FacebookAds
+
+const TestAd = (props) => (
+	<View style={{ padding: 16 }}>
+		<AdIconView />
+		<AdTriggerView>
+			<ThemedText>advertiserName: {props.nativeAd.advertiserName}</ThemedText>
+			<ThemedText>headline: {props.nativeAd.headline}</ThemedText>
+			<ThemedText>linkDescription: {props.nativeAd.linkDescription}</ThemedText>
+			<ThemedText>adTranslation: {props.nativeAd.adTranslation}</ThemedText>
+			<ThemedText>promotedTranslation: {props.nativeAd.promotedTranslation}</ThemedText>
+			<ThemedText>sponsoredTranslation: {props.nativeAd.sponsoredTranslation}</ThemedText>
+			<ThemedText>bodyText: {props.nativeAd.bodyText}</ThemedText>
+			<ThemedText>callToActionText: {props.nativeAd.callToActionText}</ThemedText>
+			<ThemedText>socialContext: {props.nativeAd.socialContext}</ThemedText>
+		</AdTriggerView>
+		<AdMediaView />
+	</View>
+)
+const NativeTestAd = FacebookAds.withNativeAd(TestAd)
+
 const Welcome = () => (
-	<ScrollView contentInsetAdjustmentBehavior="automatic" style={styles.scrollContainer}>
-		<Form />
-	</ScrollView>
+	<>
+		<ScrollView contentInsetAdjustmentBehavior="automatic" style={styles.scrollContainer}>
+			<Form />
+		</ScrollView>
+
+		<SafeAreaView
+			style={{
+				position: 'absolute',
+				bottom: 0,
+			}}
+		>
+			{/* <FacebookAds.BannerAd
+				placementId="763053297519162_763060940851731"
+				type="large"
+				onPress={() => console.warn('clicked')}
+				onError={(error) => console.warn(error)}
+			/> */}
+			<NativeTestAd adsManager={adsManager} />
+		</SafeAreaView>
+	</>
 )
 
 Welcome.options = {

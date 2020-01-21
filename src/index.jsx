@@ -5,13 +5,13 @@ import React from 'react'
 import { AppearanceProvider } from 'react-native-appearance'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 
-import { Stack } from './navigation/stack'
+import { Navigation } from './navigation'
 
 const App = () => (
 	<AppearanceProvider>
 		<SafeAreaProvider>
 			<ActionSheetProvider>
-				<Stack />
+				<Navigation />
 			</ActionSheetProvider>
 		</SafeAreaProvider>
 	</AppearanceProvider>

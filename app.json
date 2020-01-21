@@ -1,6 +1,20 @@
 {
 	"expo": {
 		"assetBundlePatterns": ["**/*"],
+		"facebookAppId": "763053297519162",
+		"facebookDisplayName": "WhatsAdd",
+		"hooks": {
+			"postPublish": [
+				{
+					"file": "sentry-expo/upload-sourcemaps",
+					"config": {
+						"authToken": "7af08384f35b4fccac5205f170620e3793b453b81bba4cee99ab93305abcd5d1",
+						"organization": "lrnz09",
+						"project": "whatsadd"
+					}
+				}
+			]
+		},
 		"icon": "./src/assets/icon.png",
 		"ios": {
 			"supportsTablet": true
