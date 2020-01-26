@@ -83,7 +83,6 @@ class _MyHomePageState extends State<MyHomePage> {
               decoration: InputDecoration(
                 border: InputBorder.none,
                 filled: true,
-                floatingLabelBehavior: FloatingLabelBehavior.auto,
                 helperText: 'Make sure to enter the country prefix too',
                 labelText: 'Phone number',
                 prefixIcon: Icon(Mdi.dialpad),
