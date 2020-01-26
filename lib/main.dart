@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:mdi/mdi.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(App());
 
-class MyApp extends StatelessWidget {
+class App extends StatelessWidget {
   final title = 'WhosApp';
 
   @override
@@ -17,25 +17,29 @@ class MyApp extends StatelessWidget {
       ),
       darkTheme:
           ThemeData(brightness: Brightness.dark, primarySwatch: Colors.green),
-      home: MyHomePage(title: title),
+      home: Home(title: title),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class Home extends StatefulWidget {
+  Home({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _HomeState createState() => _HomeState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomeState extends State<Home> {
+  final _phoneNumberMaxLength = 15;
+
   var _phoneNumber = '';
 
   void _onPhoneNumberChanged(text) {
-    _phoneNumber = text;
+    setState(() {
+      _phoneNumber = text;
+    });
   }
 
   void _onButtonPressed() async {
@@ -48,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Nope'),
+            title: Text('Bad news'),
             content: Text('It seems you don\'t have WhatsApp installed.'),
             actions: <Widget>[
               FlatButton(
@@ -82,13 +86,17 @@ class _MyHomePageState extends State<MyHomePage> {
               autofocus: true,
               decoration: InputDecoration(
                 border: InputBorder.none,
+                errorText: _phoneNumber.length > _phoneNumberMaxLength
+                    ? 'Are you sure this phone number is correct?'
+                    : null,
                 filled: true,
-                helperText: 'Make sure to enter the country prefix too',
+                helperText:
+                    'Make sure to enter the country prefix with or without +',
                 labelText: 'Phone number',
                 prefixIcon: Icon(Mdi.dialpad),
               ),
               keyboardType: TextInputType.phone,
-              maxLength: 15,
+              maxLength: _phoneNumberMaxLength,
               maxLengthEnforced: false,
               onChanged: _onPhoneNumberChanged,
             ),
