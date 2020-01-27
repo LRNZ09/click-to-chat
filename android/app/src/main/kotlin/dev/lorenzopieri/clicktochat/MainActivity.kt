@@ -1,4 +1,4 @@
-package dev.lorenzopieri.whosapp
+package dev.lorenzopieri.clicktochat
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity
