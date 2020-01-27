@@ -5,7 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 void main() => runApp(App());
 
 class App extends StatelessWidget {
-  final title = 'WhosApp';
+  final title = 'Click to Chat';
 
   @override
   Widget build(BuildContext context) {
