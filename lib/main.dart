@@ -75,7 +75,6 @@ class _HomeState extends State<Home> {
         title: Text(widget.title),
       ),
       body: GestureDetector(
-        behavior: HitTestBehavior.opaque,
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
         },
@@ -91,7 +90,7 @@ class _HomeState extends State<Home> {
                     : null,
                 filled: true,
                 helperText:
-                    'Make sure to enter the country prefix with or without +',
+                    'Enter the country prefix with or without the + sign',
                 labelText: 'Phone number',
                 prefixIcon: Icon(Mdi.dialpad),
               ),
@@ -106,7 +105,7 @@ class _HomeState extends State<Home> {
             RaisedButton.icon(
               icon: Icon(Mdi.whatsapp),
               label: Text('Open In WhatsApp'),
-              onPressed: _onButtonPressed,
+              onPressed: _phoneNumber.length == 0 ? null : _onButtonPressed,
             )
           ],
         ),
