@@ -16,13 +16,8 @@ class _BodyState extends State<Body> {
   final _phoneNumberMaxLength = 15;
 
   var _phoneNumber = '';
-  // var _phoneNumberSet = Set();
-  var _phoneNumberSet = Set.from(['1', '2', '3']);
-  var _phoneNumberDateTimeMap = {
-    '1': DateTime.now(),
-    '2': DateTime.now(),
-    '3': DateTime.now()
-  };
+  var _phoneNumberSet = Set();
+  var _phoneNumberDateTimeMap = {};
 
   void _onPhoneNumberChanged(text) {
     setState(() {
@@ -43,7 +38,7 @@ class _BodyState extends State<Body> {
         _phoneNumberDateTimeMap[phoneNumber] = DateTime.now();
       });
     } else {
-      showDialog<void>(
+      showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
@@ -172,7 +167,7 @@ class _BodyState extends State<Body> {
                   _onListTileTap(phoneNumber);
                 },
                 onLongPress: () {
-                  showModalBottomSheet<void>(
+                  showModalBottomSheet(
                     context: context,
                     builder: (BuildContext context) {
                       return SafeArea(
