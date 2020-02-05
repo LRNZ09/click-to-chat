@@ -174,11 +174,32 @@ class _BodyState extends State<Body> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
+                            // TODO
+                            // ListTile(
+                            //   leading: Icon(Mdi.accountPlusOutline),
+                            //   title: Text('Add to contacts'),
+                            //   onTap: () {
+                            //     Navigator.pop(context);
+                            //   },
+                            // ),
                             ListTile(
-                              leading: Icon(Mdi.accountPlusOutline),
-                              title: Text('Add to contacts'),
-                              onTap: () {
+                              leading: Icon(Mdi.phoneOutline),
+                              title: Text('Call'),
+                              onTap: () async {
                                 Navigator.pop(context);
+
+                                var url = 'tel://$phoneNumber';
+                                await launch(url);
+                              },
+                            ),
+                            ListTile(
+                              leading: Icon(Mdi.messageTextOutline),
+                              title: Text('Send SMS message'),
+                              onTap: () async {
+                                Navigator.pop(context);
+
+                                var url = 'sms://$phoneNumber';
+                                await launch(url);
                               },
                             ),
                             ListTile(
