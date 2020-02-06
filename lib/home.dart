@@ -1,3 +1,4 @@
+import 'package:app_review/app_review.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mdi/mdi.dart';
@@ -70,6 +71,15 @@ class _HomeState extends State<Home> {
           FocusScope.of(context).requestFocus(new FocusNode());
         },
         child: Body(),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () async {
+          var result = await AppReview.storeListing;
+          // TODO
+          print(result);
+        },
+        icon: Icon(Mdi.starFace),
+        label: Text('Rate'),
       ),
     );
   }
