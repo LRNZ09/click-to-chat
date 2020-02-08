@@ -1,7 +1,6 @@
 import 'package:app_review/app_review.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mdi/mdi.dart';
 import 'package:package_info/package_info.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -21,15 +20,12 @@ enum PopupMenuItemEnum { about, sendFeedback }
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
+    final title = Text(widget.title);
+
     return Scaffold(
       appBar: AppBar(
         actions: [
           PopupMenuButton(
-            icon: Icon(
-              defaultTargetPlatform == TargetPlatform.iOS
-                  ? Mdi.dotsHorizontal
-                  : Mdi.dotsVertical,
-            ),
             onSelected: (PopupMenuItemEnum choice) async {
               switch (choice) {
                 case PopupMenuItemEnum.sendFeedback:
@@ -64,7 +60,7 @@ class _HomeState extends State<Home> {
             ],
           ),
         ],
-        title: Text(widget.title),
+        title: title,
       ),
       body: GestureDetector(
         onTap: () {
@@ -78,8 +74,8 @@ class _HomeState extends State<Home> {
           // TODO
           print(result);
         },
-        icon: Icon(Mdi.starFace),
-        label: Text('Rate'),
+        icon: Icon(Icons.star),
+        label: Text('Rate me'),
       ),
     );
   }
