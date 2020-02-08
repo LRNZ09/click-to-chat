@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_brand_icons/flutter_brand_icons.dart';
 import 'package:intl/intl.dart';
-import 'package:mdi/mdi.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Body extends StatefulWidget {
@@ -107,7 +107,7 @@ class _BodyState extends State<Body> {
                   helperText:
                       'Enter the country prefix with or without the + sign',
                   labelText: 'Phone number',
-                  prefixIcon: Icon(Mdi.dialpad),
+                  prefixIcon: Icon(Icons.dialpad),
                 ),
                 keyboardType: TextInputType.phone,
                 maxLength: _phoneNumberMaxLength,
@@ -118,7 +118,7 @@ class _BodyState extends State<Body> {
                 height: 24,
               ),
               RaisedButton.icon(
-                icon: Icon(Mdi.whatsapp),
+                icon: Icon(BrandIcons.whatsapp),
                 label: Text('Open In WhatsApp'),
                 onPressed: _phoneNumber.length == 0 ? null : _onButtonPressed,
               ),
@@ -144,13 +144,13 @@ class _BodyState extends State<Body> {
               background: Container(
                 color: Colors.blue,
                 alignment: Alignment.centerLeft,
-                child: Icon(Mdi.contentCopy, color: Colors.white),
+                child: Icon(Icons.content_copy, color: Colors.white),
                 padding: EdgeInsets.only(left: 24),
               ),
               secondaryBackground: Container(
                 color: Colors.red,
                 alignment: Alignment.centerRight,
-                child: Icon(Mdi.deleteOutline, color: Colors.white),
+                child: Icon(Icons.delete_outline, color: Colors.white),
                 padding: EdgeInsets.only(right: 24),
               ),
               onDismissed: (direction) {
@@ -183,7 +183,7 @@ class _BodyState extends State<Body> {
                             //   },
                             // ),
                             ListTile(
-                              leading: Icon(Mdi.phoneOutline),
+                              leading: Icon(Icons.phone),
                               title: Text('Call'),
                               onTap: () async {
                                 Navigator.pop(context);
@@ -193,7 +193,7 @@ class _BodyState extends State<Body> {
                               },
                             ),
                             ListTile(
-                              leading: Icon(Mdi.messageTextOutline),
+                              leading: Icon(Icons.message),
                               title: Text('Send SMS message'),
                               onTap: () async {
                                 Navigator.pop(context);
@@ -203,7 +203,7 @@ class _BodyState extends State<Body> {
                               },
                             ),
                             ListTile(
-                              leading: Icon(Mdi.contentCopy),
+                              leading: Icon(Icons.content_copy),
                               title: Text('Copy'),
                               onTap: () {
                                 Navigator.pop(context);
@@ -212,7 +212,7 @@ class _BodyState extends State<Body> {
                               },
                             ),
                             ListTile(
-                              leading: Icon(Mdi.deleteOutline),
+                              leading: Icon(Icons.delete_outline),
                               title: Text('Delete'),
                               onTap: () {
                                 Navigator.pop(context);

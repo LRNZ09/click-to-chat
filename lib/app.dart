@@ -9,12 +9,21 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primarySwatch = Colors.green;
+
+    final theme = ThemeData(
+      brightness: Brightness.light,
+      primarySwatch: primarySwatch,
+    );
+
+    final darkTheme = ThemeData(
+      brightness: Brightness.dark,
+      primarySwatch: primarySwatch,
+    );
+
     return MaterialApp(
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        primarySwatch: Colors.green,
-      ),
-      debugShowCheckedModeBanner: false,
+      darkTheme: darkTheme,
+      // debugShowCheckedModeBanner: false,
       home: Home(title: title),
       localizationsDelegates: [
         GlobalCupertinoLocalizations.delegate,
@@ -25,10 +34,7 @@ class App extends StatelessWidget {
         const Locale('en'),
         const Locale('it'),
       ],
-      theme: ThemeData(
-        brightness: Brightness.light,
-        primarySwatch: Colors.green,
-      ),
+      theme: theme,
       title: title,
     );
   }
