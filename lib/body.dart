@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_brand_icons/flutter_brand_icons.dart';
 import 'package:intl/intl.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 class Body extends StatefulWidget {
   @override
@@ -30,8 +30,8 @@ class _BodyState extends State<Body> {
 
     var url = 'whatsapp://send?phone=$phoneNumber';
 
-    if (await canLaunch(url)) {
-      await launch(url);
+    if (await UrlLauncher.canLaunch(url)) {
+      await UrlLauncher.launch(url);
 
       setState(() {
         _phoneNumberSet.add(phoneNumber);
@@ -48,7 +48,7 @@ class _BodyState extends State<Body> {
               FlatButton(
                 child: Text('OK'),
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  Navigator.pop(context);
                 },
               ),
             ],
@@ -189,7 +189,7 @@ class _BodyState extends State<Body> {
                                 Navigator.pop(context);
 
                                 var url = 'tel://$phoneNumber';
-                                await launch(url);
+                                await UrlLauncher.launch(url);
                               },
                             ),
                             ListTile(
@@ -199,7 +199,7 @@ class _BodyState extends State<Body> {
                                 Navigator.pop(context);
 
                                 var url = 'sms://$phoneNumber';
-                                await launch(url);
+                                await UrlLauncher.launch(url);
                               },
                             ),
                             ListTile(

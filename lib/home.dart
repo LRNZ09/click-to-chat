@@ -1,8 +1,7 @@
-import 'package:app_review/app_review.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 import 'body.dart';
 
@@ -24,12 +23,17 @@ class _HomeState extends State<Home> {
 
     return Scaffold(
       appBar: AppBar(
+        // TODO
+        // leading: IconButton(
+        //   icon: Icon(Icons.settings),
+        //   onPressed: () {},
+        // ),
         actions: [
           PopupMenuButton(
             onSelected: (PopupMenuItemEnum choice) async {
               switch (choice) {
                 case PopupMenuItemEnum.sendFeedback:
-                  await launch('mailto:feedback@lorenzopieri.dev');
+                  await UrlLauncher.launch('mailto:feedback@lorenzopieri.dev');
                   break;
 
                 case PopupMenuItemEnum.about:
@@ -68,15 +72,48 @@ class _HomeState extends State<Home> {
         },
         child: Body(),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async {
-          var result = await AppReview.storeListing;
-          // TODO
-          print(result);
+      // ? WIP
+      // bottomNavigationBar: BottomAppBar(
+      //   shape: AutomaticNotchedShape(
+      //     RoundedRectangleBorder(),
+      //     StadiumBorder(
+      //       side: BorderSide(),
+      //     ),
+      //   ),
+      //   child: Row(
+      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //     mainAxisSize: MainAxisSize.max,
+      //     children: [
+      //       IconButton(
+      //         icon: Icon(
+      //           Icons.settings,
+      //         ),
+      //         onPressed: () {},
+      //       ),
+      //       IconButton(
+      //         icon: Icon(
+      //           Icons.share,
+      //         ),
+      //         onPressed: () {},
+      //       ),
+      //     ],
+      //   ),
+      // ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          var url;
+          if (defaultTargetPlatform == TargetPlatform.iOS) {
+            url = 'https://apps.apple.com/app/id1496675283';
+          } else {
+            url =
+                'https://play.google.com/store/apps/details?id=dev.lorenzopieri.clicktochat';
+          }
+          UrlLauncher.launch(url);
         },
-        icon: Icon(Icons.star),
-        label: Text('Rate me'),
+        child: Icon(Icons.share),
+        tooltip: 'Share this app',
       ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
