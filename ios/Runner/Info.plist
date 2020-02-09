@@ -22,6 +22,7 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
+		<string>itms-apps</string>
 		<string>sms</string>
 		<string>tel</string>
 		<string>whatsapp</string>
