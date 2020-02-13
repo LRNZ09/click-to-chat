@@ -1,9 +1,43 @@
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_brand_icons/flutter_brand_icons.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:sim_info/sim_info.dart';
+
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
+
+class Country {
+  final String alpha2Code;
+  final String callingCode;
+  final String nativeName;
+
+  Country({
+    this.alpha2Code,
+    this.callingCode,
+    this.nativeName,
+  });
+
+  factory Country.fromJson(Map<String, dynamic> json) {
+    return Country(
+      alpha2Code: json['alpha2Code'],
+      callingCode: json['callingCodes'][0],
+      nativeName: json['nativeName'],
+    );
+  }
+
+  String get emoji {
+    return alpha2Code.toUpperCase().replaceAllMapped(RegExp('.'),
+        (char) => String.fromCharCode(char[0].codeUnitAt(0) + 127397));
+  }
+
+  int get hashCode => alpha2Code.hashCode;
+
+  bool operator ==(other) =>
+      (other is Country && other.alpha2Code == alpha2Code);
+}
 
 class Body extends StatefulWidget {
   @override
@@ -13,11 +47,40 @@ class Body extends StatefulWidget {
 enum PopupMenuItemEnum { about, sendFeedback }
 
 class _BodyState extends State<Body> {
-  final _phoneNumberMaxLength = 15;
+  final _phoneNumberMaxLength = 12;
 
+  var _countriesFuture = http.get(
+      'https://restcountries.eu/rest/v2/all?fields=alpha2Code;callingCodes;nativeName');
+
+  Country _phoneNumberCountry;
   var _phoneNumber = '';
   var _phoneNumberSet = Set();
   var _phoneNumberDateTimeMap = {};
+
+  @override
+  void initState() {
+    super.initState();
+
+    SimInfo.getIsoCountryCode.then((simCountryCode) {
+      _setDefaultPhoneNumberCountry(simCountryCode);
+    }).catchError((error) {
+      var locale = Localizations.localeOf(context);
+      var countryCode = locale.countryCode ?? 'it';
+      _setDefaultPhoneNumberCountry(countryCode);
+    });
+  }
+
+  void _setDefaultPhoneNumberCountry(String countryCode) async {
+    var url =
+        'https://restcountries.eu/rest/v2/alpha/$countryCode?fields=alpha2Code;callingCodes;nativeName';
+    http.get(url).then((response) {
+      var simCountryMap = json.decode(response.body);
+      var simCountry = Country.fromJson(simCountryMap);
+      setState(() {
+        _phoneNumberCountry = simCountry;
+      });
+    });
+  }
 
   void _onPhoneNumberChanged(text) {
     setState(() {
@@ -26,8 +89,6 @@ class _BodyState extends State<Body> {
   }
 
   void _onListTileTap(phoneNumber) async {
-    if (phoneNumber.isEmpty) return;
-
     var url = 'whatsapp://send?phone=$phoneNumber';
 
     if (await UrlLauncher.canLaunch(url)) {
@@ -59,11 +120,13 @@ class _BodyState extends State<Body> {
   }
 
   void _onButtonPressed() {
-    _onListTileTap(_phoneNumber);
+    var fullPhoneNumber = '+${_phoneNumberCountry.callingCode}$_phoneNumber';
+    _onListTileTap(fullPhoneNumber);
   }
 
   void _copyPhoneNumber(String phoneNumber) async {
-    await Clipboard.setData(ClipboardData(text: phoneNumber));
+    var data = ClipboardData(text: phoneNumber);
+    await Clipboard.setData(data);
 
     Scaffold.of(context).showSnackBar(
       SnackBar(
@@ -97,15 +160,63 @@ class _BodyState extends State<Body> {
           padding: EdgeInsets.all(24),
           child: Column(
             children: [
+              FutureBuilder(
+                future: _countriesFuture,
+                builder: (context, snapshot) {
+                  var countries = [];
+                  if (snapshot.hasData)
+                    countries = json.decode(snapshot.data.body);
+
+                  var items = countries
+                      .map((countryMap) => Country.fromJson(countryMap))
+                      .where((country) => country.callingCode.isNotEmpty)
+                      .map(
+                        (country) => DropdownMenuItem(
+                          key: ValueKey(country),
+                          value: country,
+                          child:
+                              Text('${country.emoji}  ${country.nativeName}'),
+                        ),
+                      )
+                      .toList();
+
+                  return InputDecorator(
+                    decoration: InputDecoration(
+                      filled: true,
+                      prefixIcon: Icon(Icons.flag),
+                      labelText: 'Country',
+                      suffixIcon: Icon(Icons.arrow_drop_down),
+                    ),
+                    isEmpty: _phoneNumberCountry == null,
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton(
+                        iconSize: 0,
+                        value: _phoneNumberCountry,
+                        isDense: true,
+                        isExpanded: true,
+                        onChanged: (value) {
+                          setState(() {
+                            _phoneNumberCountry = value;
+                          });
+                        },
+                        items: items,
+                      ),
+                    ),
+                  );
+                },
+              ),
+              SizedBox(
+                height: 16,
+              ),
               TextField(
-                autofocus: true,
                 decoration: InputDecoration(
+                  prefixText: _phoneNumberCountry != null
+                      ? '+${_phoneNumberCountry.callingCode} '
+                      : '+',
                   errorText: _phoneNumber.length > _phoneNumberMaxLength
                       ? 'Are you sure this phone number is correct?'
                       : null,
                   filled: true,
-                  helperText:
-                      'Enter the country prefix with or without the + sign',
                   labelText: 'Phone number',
                   prefixIcon: Icon(Icons.dialpad),
                 ),
@@ -120,7 +231,7 @@ class _BodyState extends State<Body> {
               RaisedButton.icon(
                 icon: Icon(BrandIcons.whatsapp),
                 label: Text('Open In WhatsApp'),
-                onPressed: _phoneNumber.length == 0 ? null : _onButtonPressed,
+                onPressed: _phoneNumber.isEmpty ? null : _onButtonPressed,
               ),
             ],
           ),
@@ -212,7 +323,7 @@ class _BodyState extends State<Body> {
                               },
                             ),
                             ListTile(
-                              leading: Icon(Icons.delete_outline),
+                              leading: Icon(Icons.delete),
                               title: Text('Delete'),
                               onTap: () {
                                 Navigator.pop(context);
