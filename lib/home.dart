@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
+import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 import 'body.dart';
@@ -100,7 +101,7 @@ class _HomeState extends State<Home> {
       //   ),
       // ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
           var url;
           if (defaultTargetPlatform == TargetPlatform.iOS) {
             url = 'https://apps.apple.com/app/id1496675283';
@@ -108,7 +109,7 @@ class _HomeState extends State<Home> {
             url =
                 'https://play.google.com/store/apps/details?id=dev.lorenzopieri.clicktochat';
           }
-          UrlLauncher.launch(url);
+          await Share.share(url);
         },
         child: Icon(Icons.share),
         tooltip: 'Share this app',
