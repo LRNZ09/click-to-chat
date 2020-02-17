@@ -6,22 +6,24 @@ import 'app.dart';
 import 'sentry.dart';
 
 void main() {
-  FlutterError.onError = onFlutterError;
+  FlutterError.onError = _onFlutterError;
 
   // Run the whole app in a zone to capture all uncaught errors.
-  runZoned(() => runApp(App()), onError: onAppError);
+  runZoned(_runApp, onError: _onError);
 }
 
-var onFlutterError = (FlutterErrorDetails details) {
-  try {
-    onAppError(details.exception, details.stack);
-  } finally {
-    // Also use Flutter's pretty error logging to the device's console.
-    FlutterError.dumpErrorToConsole(details, forceReport: true);
-  }
-};
+void _runApp() {
+  runApp(App());
+}
 
-var onAppError = (Object error, StackTrace stackTrace) {
+void _onFlutterError(FlutterErrorDetails details) {
+  _onError(details.exception, details.stack);
+
+  // Also use Flutter's pretty error logging to the device's console.
+  FlutterError.dumpErrorToConsole(details, forceReport: true);
+}
+
+void _onError(Object error, StackTrace stackTrace) {
   try {
     sentry.captureException(
       exception: error,
@@ -32,4 +34,4 @@ var onAppError = (Object error, StackTrace stackTrace) {
     print('Sending report to Sentry failed: $sentryError');
     print('Original error: $error');
   }
-};
+}

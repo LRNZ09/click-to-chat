@@ -65,7 +65,7 @@ class _BodyState extends State<Body> {
       _setDefaultPhoneNumberCountry(simCountryCode);
     }).catchError((error) {
       var locale = Localizations.localeOf(context);
-      var countryCode = locale.countryCode ?? 'it';
+      var countryCode = locale.countryCode ?? 'us';
       _setDefaultPhoneNumberCountry(countryCode);
     });
   }
