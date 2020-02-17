@@ -23,7 +23,7 @@ class App extends StatelessWidget {
 
     return MaterialApp(
       darkTheme: darkTheme,
-      // debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false,
       home: Home(title: title),
       localizationsDelegates: [
         GlobalCupertinoLocalizations.delegate,
