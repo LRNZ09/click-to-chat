@@ -1,13 +1,16 @@
 import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_brand_icons/flutter_brand_icons.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sim_info/sim_info.dart';
-
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
+
+import 'sentry.dart';
 
 class Country {
   final String alpha2Code;
@@ -58,27 +61,68 @@ class _BodyState extends State<Body> {
   var _phoneNumberDateTimeMap = {};
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    _initPhoneNumberCountry();
 
-    SimInfo.getIsoCountryCode.then((simCountryCode) {
-      _setDefaultPhoneNumberCountry(simCountryCode);
-    }).catchError((error) {
-      var locale = Localizations.localeOf(context);
-      var countryCode = locale.countryCode ?? 'us';
-      _setDefaultPhoneNumberCountry(countryCode);
-    });
+    super.didChangeDependencies();
   }
 
-  void _setDefaultPhoneNumberCountry(String countryCode) async {
-    var url =
+  void _initPhoneNumberCountry() async {
+    if (_phoneNumberCountry != null) return;
+
+    final locale = Localizations.localeOf(context);
+    var countryCode = locale.countryCode ?? 'us';
+
+    try {
+      final shouldShowPermissionDialog = await PermissionHandler()
+          .shouldShowRequestPermissionRationale(PermissionGroup.phone);
+
+      var shouldAskPermission = true;
+      if (shouldShowPermissionDialog)
+        shouldAskPermission = await showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            content: Text(
+                'Phone permission is required in order to get the country from your SIM card, otherwise the one of your locale will be used in its place'),
+            actions: [
+              FlatButton(
+                child: Text('Not now'.toUpperCase()),
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+              ),
+              FlatButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+              ),
+            ],
+          ),
+        );
+
+      if (shouldAskPermission) {
+        final permissions = await PermissionHandler()
+            .requestPermissions([PermissionGroup.phone]);
+
+        if (permissions[PermissionGroup.phone] == PermissionStatus.granted) {
+          final simCountryCode = await SimInfo.getIsoCountryCode;
+          if (simCountryCode.isNotEmpty) countryCode = simCountryCode;
+        }
+      }
+    } catch (error) {
+      sentry.captureException(exception: error);
+    }
+
+    final url =
         'https://restcountries.eu/rest/v2/alpha/$countryCode?fields=alpha2Code;callingCodes;nativeName';
-    http.get(url).then((response) {
-      var simCountryMap = json.decode(response.body);
-      var simCountry = Country.fromJson(simCountryMap);
-      setState(() {
-        _phoneNumberCountry = simCountry;
-      });
+    final response = await http.get(url);
+
+    final simCountryMap = json.decode(response.body);
+    final simCountry = Country.fromJson(simCountryMap);
+    setState(() {
+      _phoneNumberCountry = simCountry;
     });
   }
 
@@ -99,22 +143,21 @@ class _BodyState extends State<Body> {
         _phoneNumberDateTimeMap[phoneNumber] = DateTime.now();
       });
     } else {
-      showDialog(
+      await showDialog(
         context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Bad news'),
-            content: Text('It seems you don\'t have WhatsApp installed.'),
-            actions: [
-              FlatButton(
-                child: Text('OK'),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          );
-        },
+        builder: (BuildContext context) => AlertDialog(
+          title: Text('Bad news'),
+          content: Text(
+              'It seems you don\'t have WhatsApp installed, try again later'),
+          actions: [
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
       );
     }
   }

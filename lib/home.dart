@@ -39,16 +39,14 @@ class _HomeState extends State<Home> {
 
                 case PopupMenuItemEnum.about:
                   var packageInfo = await PackageInfo.fromPlatform();
-                  showDialog(
+                  await showDialog(
                     context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text(widget.title),
-                        content: Text(
-                          'Version ${packageInfo.version} build ${packageInfo.buildNumber}',
-                        ),
-                      );
-                    },
+                    builder: (BuildContext context) => AlertDialog(
+                      title: Text(widget.title),
+                      content: Text(
+                        'Version ${packageInfo.version} build ${packageInfo.buildNumber}',
+                      ),
+                    ),
                   );
                   break;
               }
@@ -69,7 +67,7 @@ class _HomeState extends State<Home> {
       ),
       body: GestureDetector(
         onTap: () {
-          FocusScope.of(context).requestFocus(new FocusNode());
+          FocusScope.of(context).unfocus();
         },
         child: Body(),
       ),
