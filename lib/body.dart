@@ -71,7 +71,7 @@ class _BodyState extends State<Body> {
     if (_phoneNumberCountry != null) return;
 
     final locale = Localizations.localeOf(context);
-    var countryCode = locale.countryCode ?? 'us';
+    var countryCode = locale.countryCode;
 
     try {
       final shouldShowPermissionDialog = await PermissionHandler()
@@ -115,11 +115,19 @@ class _BodyState extends State<Body> {
       sentry.captureException(exception: error);
     }
 
-    final url =
-        'https://restcountries.eu/rest/v2/alpha/$countryCode?fields=alpha2Code;callingCodes;nativeName';
-    final response = await http.get(url);
+    Map<String, dynamic> simCountryMap;
+    if (countryCode == null) {
+      final response = await http.get(
+        'https://restcountries.eu/rest/v2/lang/${locale.languageCode}?fields=alpha2Code;callingCodes;nativeName',
+      );
+      simCountryMap = json.decode(response.body)[0];
+    } else {
+      final response = await http.get(
+        'https://restcountries.eu/rest/v2/alpha/$countryCode?fields=alpha2Code;callingCodes;nativeName',
+      );
+      simCountryMap = json.decode(response.body);
+    }
 
-    final simCountryMap = json.decode(response.body);
     final simCountry = Country.fromJson(simCountryMap);
     setState(() {
       _phoneNumberCountry = simCountry;
