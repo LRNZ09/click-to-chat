@@ -53,7 +53,8 @@ class _BodyState extends State<Body> {
   final _phoneNumberMaxLength = 12;
 
   var _countriesFuture = http.get(
-      'https://restcountries.eu/rest/v2/all?fields=alpha2Code;callingCodes;nativeName');
+    'https://restcountries.eu/rest/v2/all?fields=alpha2Code;callingCodes;nativeName',
+  );
 
   Country _phoneNumberCountry;
   var _phoneNumber = '';
@@ -106,7 +107,8 @@ class _BodyState extends State<Body> {
         final permissions = await PermissionHandler()
             .requestPermissions([PermissionGroup.phone]);
 
-        if (permissions[PermissionGroup.phone] == PermissionStatus.granted) {
+        if (permissions[PermissionGroup.phone] == PermissionStatus.granted ||
+            permissions[PermissionGroup.phone] == PermissionStatus.unknown) {
           final simCountryCode = await SimInfo.getIsoCountryCode;
           if (simCountryCode.isNotEmpty) countryCode = simCountryCode;
         }
@@ -213,7 +215,7 @@ class _BodyState extends State<Body> {
             children: [
               FutureBuilder(
                 future: _countriesFuture,
-                builder: (context, snapshot) {
+                builder: (context, AsyncSnapshot<http.Response> snapshot) {
                   var countries = [];
                   if (snapshot.hasData)
                     countries = json.decode(snapshot.data.body);
@@ -231,12 +233,34 @@ class _BodyState extends State<Body> {
                       )
                       .toList();
 
+                  var size = IconTheme.of(context).size;
+
                   return InputDecorator(
                     decoration: InputDecoration(
                       filled: true,
                       prefixIcon: Icon(Icons.flag),
                       labelText: 'Country',
-                      suffixIcon: Icon(Icons.arrow_drop_down),
+                      suffixIcon: snapshot.hasError
+                          ? IconButton(
+                              icon: Icon(Icons.error),
+                              onPressed: () {
+                                setState(() {
+                                  _countriesFuture = http.get(
+                                    'https://restcountries.eu/rest/v2/all?fields=alpha2Code;callingCodes;nativeName',
+                                  );
+                                });
+                              })
+                          : snapshot.hasData
+                              ? Icon(Icons.arrow_drop_down)
+                              : SizedBox.fromSize(
+                                  child: Center(
+                                    child: SizedBox.fromSize(
+                                      child: CircularProgressIndicator(),
+                                      size: Size.square(size),
+                                    ),
+                                  ),
+                                  size: Size.square(0),
+                                ),
                     ),
                     isEmpty: _phoneNumberCountry == null,
                     child: DropdownButtonHideUnderline(
