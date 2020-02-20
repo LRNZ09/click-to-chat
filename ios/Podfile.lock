@@ -2,6 +2,8 @@ PODS:
   - Flutter (1.0.0)
   - package_info (0.0.1):
     - Flutter
+  - "permission_handler (4.2.0+hotfix.3)":
+    - Flutter
   - share (0.5.2):
     - Flutter
   - sim_info (0.0.1):
@@ -12,21 +14,27 @@ PODS:
     - Flutter
   - url_launcher_web (0.0.1):
     - Flutter
+  - wakelock (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
+  - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
   - share (from `.symlinks/plugins/share/ios`)
   - sim_info (from `.symlinks/plugins/sim_info/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
   - url_launcher_macos (from `.symlinks/plugins/url_launcher_macos/ios`)
   - url_launcher_web (from `.symlinks/plugins/url_launcher_web/ios`)
+  - wakelock (from `.symlinks/plugins/wakelock/ios`)
 
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
   package_info:
     :path: ".symlinks/plugins/package_info/ios"
+  permission_handler:
+    :path: ".symlinks/plugins/permission_handler/ios"
   share:
     :path: ".symlinks/plugins/share/ios"
   sim_info:
@@ -37,16 +45,20 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/url_launcher_macos/ios"
   url_launcher_web:
     :path: ".symlinks/plugins/url_launcher_web/ios"
+  wakelock:
+    :path: ".symlinks/plugins/wakelock/ios"
 
 SPEC CHECKSUMS:
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   package_info: 48b108e75b8802c2d5e126f208ef540561c98aef
+  permission_handler: 40520ab8ad1bb78a282b832464e995ec87f77ec6
   share: bae0a282aab4483288913fc4dc0b935d4b491f2e
   sim_info: 9d8750399533a8eb626fbb7f6fc0776b154de2a6
   url_launcher: a1c0cc845906122c4784c542523d8cacbded5626
   url_launcher_macos: fd7894421cd39320dce5f292fc99ea9270b2a313
   url_launcher_web: e5527357f037c87560776e36436bf2b0288b965c
+  wakelock: bd3dcc6a8bcf53a1c0309780ff192dcee67c6ccb
 
-PODFILE CHECKSUM: 083258d7f5e80b42ea9bfee905fe93049bc04c64
+PODFILE CHECKSUM: 5110e87bd0e6dea059e7da1293e5bc172e63be6f
 
 COCOAPODS: 1.8.4
