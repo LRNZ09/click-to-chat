@@ -13,7 +13,7 @@ description: 'Click to Chat'
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.2.5+11
+version: 1.2.6+12
 
 environment:
   sdk: '>=2.1.0 <3.0.0'
@@ -25,6 +25,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   http: ^0.12.0+4
+  in_app_purchase: ^0.3.1+1
   intl: ^0.16.0
   package_info: ^0.4.0+13
   permission_handler: ^4.2.0+hotfix.3

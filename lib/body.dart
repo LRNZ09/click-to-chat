@@ -184,7 +184,7 @@ class _BodyState extends State<Body> {
     Scaffold.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          'Phone number $phoneNumber copied to clipboard.',
+          'Phone number $phoneNumber copied to clipboard',
         ),
       ),
     );
@@ -197,8 +197,16 @@ class _BodyState extends State<Body> {
 
     Scaffold.of(context).showSnackBar(
       SnackBar(
+        action: SnackBarAction(
+          label: 'Undo'.toUpperCase(),
+          onPressed: () {
+            setState(() {
+              _phoneNumberSet.add(phoneNumber);
+            });
+          },
+        ),
         content: Text(
-          'Phone number $phoneNumber has been deleted.',
+          'Phone number $phoneNumber has been deleted',
         ),
       ),
     );
@@ -336,7 +344,7 @@ class _BodyState extends State<Body> {
               secondaryBackground: Container(
                 color: Colors.red,
                 alignment: Alignment.centerRight,
-                child: Icon(Icons.delete_outline, color: Colors.white),
+                child: Icon(Icons.delete, color: Colors.white),
                 padding: EdgeInsets.only(right: 24),
               ),
               onDismissed: (direction) {
@@ -360,14 +368,6 @@ class _BodyState extends State<Body> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            // TODO
-                            // ListTile(
-                            //   leading: Icon(Mdi.accountPlusOutline),
-                            //   title: Text('Add to contacts'),
-                            //   onTap: () {
-                            //     Navigator.pop(context);
-                            //   },
-                            // ),
                             ListTile(
                               leading: Icon(Icons.phone),
                               title: Text('Call'),
