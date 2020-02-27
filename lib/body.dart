@@ -1,16 +1,15 @@
 import 'dart:convert';
 
+import 'package:click_to_chat/sentry.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_brand_icons/flutter_brand_icons.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:mdi/mdi.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sim_info/sim_info.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
-
-import 'sentry.dart';
 
 class Country {
   final String alpha2Code;
@@ -241,16 +240,14 @@ class _BodyState extends State<Body> {
                       )
                       .toList();
 
-                  var size = IconTheme.of(context).size;
-
                   return InputDecorator(
                     decoration: InputDecoration(
                       filled: true,
-                      prefixIcon: Icon(Icons.flag),
+                      prefixIcon: Icon(Mdi.flagVariant),
                       labelText: 'Country',
                       suffixIcon: snapshot.hasError
                           ? IconButton(
-                              icon: Icon(Icons.error),
+                              icon: Icon(Mdi.progressAlert),
                               onPressed: () {
                                 setState(() {
                                   _countriesFuture = http.get(
@@ -258,17 +255,11 @@ class _BodyState extends State<Body> {
                                   );
                                 });
                               })
-                          : snapshot.hasData
-                              ? Icon(Icons.arrow_drop_down)
-                              : SizedBox.fromSize(
-                                  child: Center(
-                                    child: SizedBox.fromSize(
-                                      child: CircularProgressIndicator(),
-                                      size: Size.square(size),
-                                    ),
-                                  ),
-                                  size: Size.square(0),
-                                ),
+                          : Icon(
+                              snapshot.hasData
+                                  ? Mdi.arrowDownDropCircle
+                                  : Mdi.progressClock,
+                            ),
                     ),
                     isEmpty: _phoneNumberCountry == null,
                     child: DropdownButtonHideUnderline(
@@ -301,7 +292,7 @@ class _BodyState extends State<Body> {
                       : null,
                   filled: true,
                   labelText: 'Phone number',
-                  prefixIcon: Icon(Icons.dialpad),
+                  prefixIcon: Icon(Mdi.dialpad),
                 ),
                 keyboardType: TextInputType.phone,
                 maxLength: _phoneNumberMaxLength,
@@ -312,7 +303,7 @@ class _BodyState extends State<Body> {
                 height: 24,
               ),
               RaisedButton.icon(
-                icon: Icon(BrandIcons.whatsapp),
+                icon: Icon(Mdi.whatsapp),
                 label: Text('Open In WhatsApp'),
                 onPressed: _phoneNumber.isEmpty ? null : _onButtonPressed,
               ),
@@ -338,13 +329,13 @@ class _BodyState extends State<Body> {
               background: Container(
                 color: Colors.blue,
                 alignment: Alignment.centerLeft,
-                child: Icon(Icons.content_copy, color: Colors.white),
+                child: Icon(Mdi.contentCopy, color: Colors.white),
                 padding: EdgeInsets.only(left: 24),
               ),
               secondaryBackground: Container(
                 color: Colors.red,
                 alignment: Alignment.centerRight,
-                child: Icon(Icons.delete, color: Colors.white),
+                child: Icon(Mdi.delete, color: Colors.white),
                 padding: EdgeInsets.only(right: 24),
               ),
               onDismissed: (direction) {
@@ -369,7 +360,7 @@ class _BodyState extends State<Body> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             ListTile(
-                              leading: Icon(Icons.phone),
+                              leading: Icon(Mdi.phoneClassic),
                               title: Text('Call'),
                               onTap: () async {
                                 Navigator.pop(context);
@@ -379,7 +370,7 @@ class _BodyState extends State<Body> {
                               },
                             ),
                             ListTile(
-                              leading: Icon(Icons.message),
+                              leading: Icon(Mdi.messageText),
                               title: Text('Send SMS message'),
                               onTap: () async {
                                 Navigator.pop(context);
@@ -389,7 +380,7 @@ class _BodyState extends State<Body> {
                               },
                             ),
                             ListTile(
-                              leading: Icon(Icons.content_copy),
+                              leading: Icon(Mdi.contentCopy),
                               title: Text('Copy'),
                               onTap: () {
                                 Navigator.pop(context);
@@ -398,7 +389,7 @@ class _BodyState extends State<Body> {
                               },
                             ),
                             ListTile(
-                              leading: Icon(Icons.delete),
+                              leading: Icon(Mdi.delete),
                               title: Text('Delete'),
                               onTap: () {
                                 Navigator.pop(context);

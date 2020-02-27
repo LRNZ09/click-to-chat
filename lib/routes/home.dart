@@ -1,10 +1,13 @@
+import 'dart:io';
+
+import 'package:click_to_chat/body.dart';
+import 'package:click_to_chat/routes/unlock.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:mdi/mdi.dart';
 import 'package:package_info/package_info.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
-
-import 'body.dart';
 
 class Home extends StatefulWidget {
   Home({Key key, this.title}) : super(key: key);
@@ -24,11 +27,6 @@ class _HomeState extends State<Home> {
 
     return Scaffold(
       appBar: AppBar(
-        // TODO
-        // leading: IconButton(
-        //   icon: Icon(Icons.settings),
-        //   onPressed: () {},
-        // ),
         actions: [
           PopupMenuButton(
             onSelected: (PopupMenuItemEnum choice) async {
@@ -39,14 +37,12 @@ class _HomeState extends State<Home> {
 
                 case PopupMenuItemEnum.about:
                   var packageInfo = await PackageInfo.fromPlatform();
-                  await showDialog(
+                  showAboutDialog(
                     context: context,
-                    builder: (BuildContext context) => AlertDialog(
-                      title: Text(widget.title),
-                      content: Text(
+                    applicationName: widget.title,
+                    applicationVersion:
                         'Version ${packageInfo.version} build ${packageInfo.buildNumber}',
-                      ),
-                    ),
+                    applicationLegalese: 'Made by LRNZ09',
                   );
                   break;
               }
@@ -71,48 +67,44 @@ class _HomeState extends State<Home> {
         },
         child: Body(),
       ),
-      // ? WIP
-      // bottomNavigationBar: BottomAppBar(
-      //   shape: AutomaticNotchedShape(
-      //     RoundedRectangleBorder(),
-      //     StadiumBorder(
-      //       side: BorderSide(),
-      //     ),
-      //   ),
-      //   child: Row(
-      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //     mainAxisSize: MainAxisSize.max,
-      //     children: [
-      //       IconButton(
-      //         icon: Icon(
-      //           Icons.settings,
-      //         ),
-      //         onPressed: () {},
-      //       ),
-      //       IconButton(
-      //         icon: Icon(
-      //           Icons.share,
-      //         ),
-      //         onPressed: () {},
-      //       ),
-      //     ],
-      //   ),
-      // ),
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          children: [
+            IconButton(
+              icon: Icon(Mdi.lockOpen),
+              onPressed: () {
+                final route = MaterialPageRoute(builder: (context) => Unlock());
+                Navigator.push(context, route);
+              },
+              tooltip: 'Unlock full version',
+            ),
+            IconButton(
+              icon: Icon(Mdi.starFace),
+              onPressed: () {},
+              tooltip: 'Leave a review',
+            ),
+          ],
+        ),
+        notchMargin: 8,
+        shape: CircularNotchedRectangle(),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           var url;
-          if (defaultTargetPlatform == TargetPlatform.iOS) {
-            url = 'https://apps.apple.com/app/id1496675283';
-          } else {
+
+          if (Platform.isAndroid) {
             url =
                 'https://play.google.com/store/apps/details?id=dev.lorenzopieri.clicktochat';
+          } else if (Platform.isIOS) {
+            url = 'https://apps.apple.com/app/id1496675283';
           }
-          await Share.share(url);
+
+          if (url != null) await Share.share(url);
         },
-        child: Icon(Icons.share),
-        tooltip: 'Share this app',
+        child: Icon(Mdi.shareVariant),
+        tooltip: 'Share the app',
       ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 }
