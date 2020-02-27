@@ -1,5 +1,5 @@
-import 'package:flutter_brand_icons/flutter_brand_icons.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mdi/mdi.dart';
 
 import 'package:click_to_chat/app.dart';
 
@@ -11,7 +11,7 @@ void main() {
 
     expect(textField, findsOneWidget);
 
-    var button = find.byIcon(BrandIcons.whatsapp);
+    var button = find.byIcon(Mdi.whatsapp);
 
     expect(button, findsOneWidget);
 

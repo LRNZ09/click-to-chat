@@ -1,8 +1,7 @@
+import 'package:click_to_chat/routes/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-
-import 'home.dart';
 
 class App extends StatelessWidget {
   final title = 'Click to Chat';

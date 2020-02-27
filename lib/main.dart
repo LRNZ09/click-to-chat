@@ -1,25 +1,18 @@
 import 'dart:async';
 
+import 'package:click_to_chat/app.dart';
+import 'package:click_to_chat/debug.dart';
+import 'package:click_to_chat/sentry.dart';
 import 'package:flutter/material.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:wakelock/wakelock.dart';
 
-import 'app.dart';
-import 'sentry.dart';
-
-/// Whether the VM is running in debug mode.
-bool get isInDebugMode {
-  // Assume you're in production mode.
-  bool inDebugMode = false;
-
-  // Assert expressions are only evaluated during development. They are ignored
-  // in production. Therefore, this code only sets `inDebugMode` to true
-  // in a development environment.
-  assert(inDebugMode = true);
-
-  return inDebugMode;
-}
-
 void main() {
+  // For play billing library 2.0 on Android, it is mandatory to call
+  // [enablePendingPurchases](https://developer.android.com/reference/com/android/billingclient/api/BillingClient.Builder.html#enablependingpurchases)
+  // as part of initializing the app.
+  InAppPurchaseConnection.enablePendingPurchases();
+
   // This captures errors reported by the Flutter framework.
   FlutterError.onError = _onFlutterError;
 
