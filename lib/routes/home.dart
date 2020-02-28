@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app_review/app_review.dart';
 import 'package:click_to_chat/body.dart';
 import 'package:click_to_chat/routes/unlock.dart';
 import 'package:flutter/foundation.dart';
@@ -80,7 +81,9 @@ class _HomeState extends State<Home> {
             ),
             IconButton(
               icon: Icon(Mdi.starFace),
-              onPressed: () {},
+              onPressed: () async {
+                await AppReview.writeReview;
+              },
               tooltip: 'Leave a review',
             ),
           ],

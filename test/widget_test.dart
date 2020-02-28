@@ -4,20 +4,23 @@ import 'package:mdi/mdi.dart';
 import 'package:click_to_chat/app.dart';
 
 void main() {
-  testWidgets('Home', (WidgetTester tester) async {
+  testWidgets('App', (WidgetTester tester) async {
     await tester.pumpWidget(App());
 
-    var textField = find.text('Phone number');
+    var countryField = find.text('Country');
+    expect(countryField, findsOneWidget);
 
-    expect(textField, findsOneWidget);
+    var phoneNumberField = find.text('Phone number');
+    expect(phoneNumberField, findsOneWidget);
 
     var button = find.byIcon(Mdi.whatsapp);
-
     expect(button, findsOneWidget);
 
-    await tester.tap(button);
+    // TODO Verify that our button is disabled
+    // await tester.tap(button);
     // await tester.pump();
 
-    // TODO Verify that our button is disabled
+    var shareFab = find.byIcon(Mdi.shareVariant);
+    expect(shareFab, findsOneWidget);
   });
 }
