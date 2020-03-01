@@ -31,6 +31,7 @@ class AppLocalizations {
   String get homeOpenButton =>
       Intl.message('Open in WhatsApp', name: 'homeOpenButton');
   String get phoneNumber => Intl.message('Phone number', name: 'phoneNumber');
+  // String get phoneNumberError => Intl.message('Phone number error', name: 'phoneNumberError');
   String get sendFeedback =>
       Intl.message('Send feedback', name: 'sendFeedback');
 }

@@ -73,40 +73,40 @@ class _HomeState extends State<Home> {
         child: Row(
           children: [
             IconButton(
-              icon: Icon(Mdi.lockOpen),
-              onPressed: () {
-                final route = MaterialPageRoute(builder: (context) => Unlock());
-                Navigator.push(context, route);
-              },
-              tooltip: 'Unlock full version',
-            ),
-            IconButton(
               icon: Icon(Mdi.starFace),
               onPressed: () async {
                 await AppReview.writeReview;
               },
-              tooltip: 'Leave a review',
+              // tooltip: 'Leave a review',
+            ),
+            IconButton(
+              icon: Icon(Mdi.shareVariant),
+              onPressed: () async {
+                var url;
+
+                if (Platform.isAndroid) {
+                  url =
+                      'https://play.google.com/store/apps/details?id=dev.lorenzopieri.clicktochat';
+                } else if (Platform.isIOS) {
+                  url = 'https://apps.apple.com/app/id1496675283';
+                }
+
+                if (url != null) await Share.share(url, subject: widget.title);
+              },
+              // tooltip: 'Share the app',
             ),
           ],
         ),
-        notchMargin: 16,
+        notchMargin: 12,
         shape: CircularNotchedRectangle(),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          var url;
-
-          if (Platform.isAndroid) {
-            url =
-                'https://play.google.com/store/apps/details?id=dev.lorenzopieri.clicktochat';
-          } else if (Platform.isIOS) {
-            url = 'https://apps.apple.com/app/id1496675283';
-          }
-
-          if (url != null) await Share.share(url, subject: widget.title);
+        onPressed: () {
+          final route = MaterialPageRoute(builder: (context) => Unlock());
+          Navigator.push(context, route);
         },
-        child: Icon(Mdi.shareVariant),
-        tooltip: 'Share the app',
+        child: Icon(Mdi.lockOpen),
+        // tooltip: 'Unlock the full version',
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
