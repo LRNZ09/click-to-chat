@@ -88,7 +88,7 @@ class _HomeState extends State<Home> {
             ),
           ],
         ),
-        notchMargin: 8,
+        notchMargin: 16,
         shape: CircularNotchedRectangle(),
       ),
       floatingActionButton: FloatingActionButton(
@@ -102,7 +102,7 @@ class _HomeState extends State<Home> {
             url = 'https://apps.apple.com/app/id1496675283';
           }
 
-          if (url != null) await Share.share(url);
+          if (url != null) await Share.share(url, subject: widget.title);
         },
         child: Icon(Mdi.shareVariant),
         tooltip: 'Share the app',

@@ -59,24 +59,21 @@ class _UnlockState extends State<Unlock> {
     ProductDetailsResponse productDetailResponse =
         await _connection.queryProductDetails(_kProductIds.toSet());
 
-    if (productDetailResponse.error != null) {
-      setState(() {
-        _queryProductError = productDetailResponse.error.message;
-        _isAvailable = isAvailable;
-        _products = productDetailResponse.productDetails;
-        _purchases = [];
-        // _notFoundIds = productDetailResponse.notFoundIDs;
-        _purchasePending = false;
-        _loading = false;
-      });
-      return;
-    }
-
     if (productDetailResponse.productDetails.isEmpty) {
       setState(() {
-        _queryProductError = null;
+        _queryProductError = productDetailResponse.error?.message;
         _isAvailable = isAvailable;
         _products = productDetailResponse.productDetails;
+        // _products = productDetailResponse.notFoundIDs
+        //     .map(
+        //       (value) => ProductDetails(
+        //         id: value,
+        //         title: 'Unlock the full version',
+        //         description: 'Support the app developer 👨‍💻',
+        //         price: '€ 1,09',
+        //       ),
+        //     )
+        //     .toList();
         _purchases = [];
         // _notFoundIds = productDetailResponse.notFoundIDs;
         _purchasePending = false;
@@ -121,19 +118,19 @@ class _UnlockState extends State<Unlock> {
   Widget build(BuildContext context) {
     List<Widget> stack = [];
 
-    if (_queryProductError == null) {
+    if (_queryProductError != null) {
+      stack.add(
+        Center(
+          child: Text(_queryProductError),
+        ),
+      );
+    } else {
       var children = [_buildProductList()];
       if (isInDebugMode) children.insert(0, _buildConnectionCheckTile());
 
       stack.add(
         ListView(
           children: children,
-        ),
-      );
-    } else {
-      stack.add(
-        Center(
-          child: Text(_queryProductError),
         ),
       );
     }
