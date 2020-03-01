@@ -162,8 +162,9 @@ class _UnlockState extends State<Unlock> {
   }
 
   Widget _buildConnectionCheckTile() {
-    if (_loading)
+    if (_loading) {
       return Card(child: ListTile(title: const Text('Trying to connect...')));
+    }
 
     final Widget storeHeader = ListTile(
       leading: Icon(
@@ -196,29 +197,32 @@ class _UnlockState extends State<Unlock> {
   }
 
   Widget _buildProductList() {
-    if (_loading)
+    if (_loading) {
       return Card(
         child: ListTile(
           leading: CircularProgressIndicator(),
           title: Text('Fetching products...'),
         ),
       );
+    }
 
-    if (!_isAvailable)
+    if (!_isAvailable) {
       return Card(
         child: ListTile(
           leading: CircularProgressIndicator(),
           title: Text('Cannot connect to the store'),
         ),
       );
+    }
 
     // This loading previous purchases code is just a demo. Please do not use this as it is.
     // In your app you should always verify the purchase data using the `verificationData` inside the [PurchaseDetails] object before trusting it.
     // We recommend that you use your own server to verity the purchase data.
     Map<String, PurchaseDetails> purchases =
         Map.fromEntries(_purchases.map((PurchaseDetails purchase) {
-      if (purchase.pendingCompletePurchase)
+      if (purchase.pendingCompletePurchase) {
         _connection.completePurchase(purchase);
+      }
 
       return MapEntry<String, PurchaseDetails>(purchase.productID, purchase);
     }));
@@ -266,8 +270,9 @@ class _UnlockState extends State<Unlock> {
 
   void _listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) {
     purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) async {
-      if (purchaseDetails.pendingCompletePurchase)
+      if (purchaseDetails.pendingCompletePurchase) {
         await _connection.completePurchase(purchaseDetails);
+      }
 
       switch (purchaseDetails.status) {
         case PurchaseStatus.pending:
@@ -299,11 +304,12 @@ class _UnlockState extends State<Unlock> {
 
         case PurchaseStatus.purchased:
           var isValid = _verifyPurchase(purchaseDetails);
-          if (isValid)
+          if (isValid) {
             setState(() {
               _purchases.add(purchaseDetails);
               _purchasePending = false;
             });
+          }
       }
     });
   }

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:click_to_chat/sentry.dart';
+import 'package:click_to_chat/app_localizations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:mdi/mdi.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sim_info/sim_info.dart';
-import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
+import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
 class Country {
   final String alpha2Code;
@@ -78,7 +78,7 @@ class _BodyState extends State<Body> {
           .shouldShowRequestPermissionRationale(PermissionGroup.phone);
 
       var shouldAskPermission = true;
-      if (shouldShowPermissionDialog)
+      if (shouldShowPermissionDialog) {
         shouldAskPermission = await showDialog(
           barrierDismissible: false,
           context: context,
@@ -101,6 +101,7 @@ class _BodyState extends State<Body> {
             ],
           ),
         );
+      }
 
       if (shouldAskPermission) {
         final permissions = await PermissionHandler()
@@ -113,7 +114,8 @@ class _BodyState extends State<Body> {
         }
       }
     } catch (error) {
-      sentry.captureException(exception: error);
+      // TODO show dialog?
+      print(error);
     }
 
     Map<String, dynamic> simCountryMap;
@@ -144,8 +146,8 @@ class _BodyState extends State<Body> {
   void _onListTileTap(phoneNumber) async {
     var url = 'whatsapp://send?phone=$phoneNumber';
 
-    if (await UrlLauncher.canLaunch(url)) {
-      await UrlLauncher.launch(url);
+    if (await url_launcher.canLaunch(url)) {
+      await url_launcher.launch(url);
 
       setState(() {
         _phoneNumberSet.add(phoneNumber);
@@ -224,8 +226,9 @@ class _BodyState extends State<Body> {
                 future: _countriesFuture,
                 builder: (context, AsyncSnapshot<http.Response> snapshot) {
                   var countries = [];
-                  if (snapshot.hasData)
+                  if (snapshot.hasData) {
                     countries = json.decode(snapshot.data.body);
+                  }
 
                   var items = countries
                       .map((countryMap) => Country.fromJson(countryMap))
@@ -244,7 +247,7 @@ class _BodyState extends State<Body> {
                     decoration: InputDecoration(
                       filled: true,
                       prefixIcon: Icon(Mdi.flagVariant),
-                      labelText: 'Country',
+                      labelText: AppLocalizations.of(context).country,
                       suffixIcon: snapshot.hasError
                           ? IconButton(
                               icon: Icon(Mdi.progressAlert),
@@ -291,7 +294,7 @@ class _BodyState extends State<Body> {
                       ? 'Are you sure this phone number is correct?'
                       : null,
                   filled: true,
-                  labelText: 'Phone number',
+                  labelText: AppLocalizations.of(context).phoneNumber,
                   prefixIcon: Icon(Mdi.dialpad),
                 ),
                 keyboardType: TextInputType.phone,
@@ -304,7 +307,7 @@ class _BodyState extends State<Body> {
               ),
               RaisedButton.icon(
                 icon: Icon(Mdi.whatsapp),
-                label: Text('Open In WhatsApp'),
+                label: Text(AppLocalizations.of(context).homeOpenButton),
                 onPressed: _phoneNumber.isEmpty ? null : _onButtonPressed,
               ),
             ],
@@ -366,7 +369,7 @@ class _BodyState extends State<Body> {
                                 Navigator.pop(context);
 
                                 var url = 'tel://$phoneNumber';
-                                await UrlLauncher.launch(url);
+                                await url_launcher.launch(url);
                               },
                             ),
                             ListTile(
@@ -376,7 +379,7 @@ class _BodyState extends State<Body> {
                                 Navigator.pop(context);
 
                                 var url = 'sms://$phoneNumber';
-                                await UrlLauncher.launch(url);
+                                await url_launcher.launch(url);
                               },
                             ),
                             ListTile(
