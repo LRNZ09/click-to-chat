@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:app_review/app_review.dart';
+import 'package:click_to_chat/app_localizations.dart';
 import 'package:click_to_chat/body.dart';
 import 'package:click_to_chat/routes/unlock.dart';
 import 'package:flutter/foundation.dart';
@@ -8,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:mdi/mdi.dart';
 import 'package:package_info/package_info.dart';
 import 'package:share/share.dart';
-import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
+import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
 class Home extends StatefulWidget {
   Home({Key key, this.title}) : super(key: key);
@@ -33,7 +34,7 @@ class _HomeState extends State<Home> {
             onSelected: (PopupMenuItemEnum choice) async {
               switch (choice) {
                 case PopupMenuItemEnum.sendFeedback:
-                  await UrlLauncher.launch('mailto:feedback@lorenzopieri.dev');
+                  await url_launcher.launch('mailto:feedback@lorenzopieri.dev');
                   break;
 
                 case PopupMenuItemEnum.about:
@@ -49,12 +50,12 @@ class _HomeState extends State<Home> {
               }
             },
             itemBuilder: (context) => [
-              const PopupMenuItem(
-                child: Text('Send feedback'),
+              PopupMenuItem(
+                child: Text(AppLocalizations.of(context).sendFeedback),
                 value: PopupMenuItemEnum.sendFeedback,
               ),
-              const PopupMenuItem(
-                child: Text('About'),
+              PopupMenuItem(
+                child: Text(AppLocalizations.of(context).about),
                 value: PopupMenuItemEnum.about,
               ),
             ],
