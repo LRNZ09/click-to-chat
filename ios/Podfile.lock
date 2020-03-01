@@ -1,4 +1,6 @@
 PODS:
+  - app_review (1.0.1):
+    - Flutter
   - Flutter (1.0.0)
   - in_app_purchase (0.0.1):
     - Flutter
@@ -20,6 +22,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - app_review (from `.symlinks/plugins/app_review/ios`)
   - Flutter (from `Flutter`)
   - in_app_purchase (from `.symlinks/plugins/in_app_purchase/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
@@ -32,6 +35,8 @@ DEPENDENCIES:
   - wakelock (from `.symlinks/plugins/wakelock/ios`)
 
 EXTERNAL SOURCES:
+  app_review:
+    :path: ".symlinks/plugins/app_review/ios"
   Flutter:
     :path: Flutter
   in_app_purchase:
@@ -54,6 +59,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/wakelock/ios"
 
 SPEC CHECKSUMS:
+  app_review: 1253f9c1408e4a9708abbcb28bbea969017b2f81
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   in_app_purchase: 6b3a6d6944354f353d59eb1f2a0db3fd7a40917b
   package_info: 48b108e75b8802c2d5e126f208ef540561c98aef
@@ -65,6 +71,6 @@ SPEC CHECKSUMS:
   url_launcher_web: e5527357f037c87560776e36436bf2b0288b965c
   wakelock: bd3dcc6a8bcf53a1c0309780ff192dcee67c6ccb
 
-PODFILE CHECKSUM: 5110e87bd0e6dea059e7da1293e5bc172e63be6f
+PODFILE CHECKSUM: 5182e12990717146ec29ce2a124648691ff3cced
 
 COCOAPODS: 1.8.4
