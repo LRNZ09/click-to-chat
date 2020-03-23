@@ -44,7 +44,8 @@ class _HomeState extends State<Home> {
                     applicationName: widget.title,
                     applicationVersion:
                         'Version ${packageInfo.version} build ${packageInfo.buildNumber}',
-                    applicationLegalese: 'Made by LRNZ09',
+                    applicationLegalese:
+                        AppLocalizations.of(context).appLegalese,
                   );
                   break;
               }
@@ -77,7 +78,7 @@ class _HomeState extends State<Home> {
               onPressed: () async {
                 await AppReview.writeReview;
               },
-              // tooltip: 'Leave a review',
+              tooltip: AppLocalizations.of(context).rate,
             ),
             IconButton(
               icon: Icon(Mdi.shareVariant),
@@ -93,7 +94,7 @@ class _HomeState extends State<Home> {
 
                 if (url != null) await Share.share(url, subject: widget.title);
               },
-              // tooltip: 'Share the app',
+              tooltip: AppLocalizations.of(context).share,
             ),
           ],
         ),
@@ -106,7 +107,7 @@ class _HomeState extends State<Home> {
           Navigator.push(context, route);
         },
         child: Icon(Mdi.lockOpen),
-        // tooltip: 'Unlock the full version',
+        tooltip: AppLocalizations.of(context).unlock,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );

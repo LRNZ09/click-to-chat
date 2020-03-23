@@ -7,11 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:mdi/mdi.dart';
 
-const _kProductIds = {'dev.lorenzopieri.clicktochat.full'};
+const _kProductIdEmoji = {'coffee': '☕️', 'unlock': '🔓'};
+final _kProductIds = _kProductIdEmoji.keys.toSet();
 
 class Unlock extends StatefulWidget {
-  final String title = 'Unlock';
-
   @override
   _UnlockState createState() => _UnlockState();
 }
@@ -58,7 +57,7 @@ class _UnlockState extends State<Unlock> {
     }
 
     ProductDetailsResponse productDetailResponse =
-        await _connection.queryProductDetails(_kProductIds.toSet());
+        await _connection.queryProductDetails(_kProductIds);
 
     if (productDetailResponse.productDetails.isEmpty) {
       setState(() {
@@ -87,7 +86,7 @@ class _UnlockState extends State<Unlock> {
         await _connection.queryPastPurchases();
 
     if (purchaseResponse.error != null) {
-      // handle query past purchase error..
+      // TODO handle query past purchase error...
     }
 
     final List<PurchaseDetails> verifiedPurchases = [];
@@ -232,7 +231,7 @@ class _UnlockState extends State<Unlock> {
         .map(
           (ProductDetails productDetails) => ListTile(
             title: Text(
-              productDetails.title,
+              '${productDetails.title} ${_kProductIdEmoji[productDetails.id]}',
             ),
             subtitle: Text(
               productDetails.description,
@@ -253,7 +252,7 @@ class _UnlockState extends State<Unlock> {
                       );
                     },
                   )
-                : Icon(Mdi.checkBold),
+                : Icon(Mdi.check),
           ),
         )
         .toList();
