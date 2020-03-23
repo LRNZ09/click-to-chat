@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:click_to_chat/app_localizations.dart';
 import 'package:click_to_chat/debug.dart';
 import 'package:click_to_chat/sentry.dart';
 import 'package:flutter/material.dart';
@@ -153,7 +154,7 @@ class _UnlockState extends State<Unlock> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Unlock'),
+        title: Text(AppLocalizations.of(context).unlock),
       ),
       body: Stack(
         children: stack,
@@ -288,11 +289,11 @@ class _UnlockState extends State<Unlock> {
           await showDialog(
             context: context,
             builder: (BuildContext context) => AlertDialog(
-              title: Text('Bad news'),
+              title: Text(AppLocalizations.of(context).badNews),
               content: Text('It seems there\'s an error with your purchase'),
               actions: [
                 FlatButton(
-                  child: Text('Close'.toUpperCase()),
+                  child: Text(AppLocalizations.of(context).close.toUpperCase()),
                   onPressed: () {
                     Navigator.pop(context);
                   },

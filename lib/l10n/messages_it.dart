@@ -23,9 +23,18 @@ class MessageLookup extends MessageLookupByLibrary {
   static _notInlinedMessages(_) => <String, Function> {
     "about" : MessageLookupByLibrary.simpleMessage("A proposito"),
     "appTitle" : MessageLookupByLibrary.simpleMessage("Click to Chat"),
+    "badNews" : MessageLookupByLibrary.simpleMessage("Cattive notizie"),
+    "call" : MessageLookupByLibrary.simpleMessage("Chiama"),
+    "close" : MessageLookupByLibrary.simpleMessage("Chiudi"),
+    "copy" : MessageLookupByLibrary.simpleMessage("Copia"),
     "country" : MessageLookupByLibrary.simpleMessage("Paese"),
+    "delete" : MessageLookupByLibrary.simpleMessage("Elimina"),
     "homeOpenButton" : MessageLookupByLibrary.simpleMessage("Apri in WhatsApp"),
+    "notNow" : MessageLookupByLibrary.simpleMessage("Non adesso"),
     "phoneNumber" : MessageLookupByLibrary.simpleMessage("Numero di telefono"),
-    "sendFeedback" : MessageLookupByLibrary.simpleMessage("Invia feedback")
+    "sendFeedback" : MessageLookupByLibrary.simpleMessage("Invia feedback"),
+    "sendSmsMessage" : MessageLookupByLibrary.simpleMessage("Invia messaggio SMS"),
+    "undo" : MessageLookupByLibrary.simpleMessage("Annulla"),
+    "unlock" : MessageLookupByLibrary.simpleMessage("Sblocca")
   };
 }

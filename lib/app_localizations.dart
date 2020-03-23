@@ -27,13 +27,23 @@ class AppLocalizations {
   // CamelCasing is required for the name of the Intl message.
   String get about => Intl.message('About', name: 'about');
   String get appTitle => Intl.message('Click to Chat', name: 'appTitle');
+  String get badNews => Intl.message('Bad news', name: 'badNews');
+  String get call => Intl.message('Call', name: 'call');
+  String get close => Intl.message('Close', name: 'close');
+  String get copy => Intl.message('Copy', name: 'copy');
   String get country => Intl.message('Country', name: 'country');
+  String get delete => Intl.message('Delete', name: 'delete');
   String get homeOpenButton =>
       Intl.message('Open in WhatsApp', name: 'homeOpenButton');
+  String get notNow => Intl.message('Not now', name: 'notNow');
   String get phoneNumber => Intl.message('Phone number', name: 'phoneNumber');
   // String get phoneNumberError => Intl.message('Phone number error', name: 'phoneNumberError');
   String get sendFeedback =>
       Intl.message('Send feedback', name: 'sendFeedback');
+  String get sendSmsMessage =>
+      Intl.message('Send SMS message', name: 'sendSmsMessage');
+  String get undo => Intl.message('Undo', name: 'undo');
+  String get unlock => Intl.message('Unlock', name: 'unlock');
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
