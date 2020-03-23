@@ -19,13 +19,10 @@ curl -f -s --data-binary "@l10n-input/intl_messages.arb" "https://localise.biz/a
 
 # Export translations from Loco
 curl -s -o "translated.zip" "https://localise.biz/api/export/archive/arb.zip?key=$LOCO_API_KEY"
-unzip -qq "translated.zip" -d "l10n-translated"
+unzip "translated.zip" -d "l10n-translated"
 
 # Create directory for output if it doesn't exist yet
-if [ ! -d $OUTPUT_PATH ]
-then
-    mkdir $OUTPUT_PATH
-fi
+mkdir -p $OUTPUT_PATH
 
 # Generate Dart files with translations
 flutter pub pub run intl_translation:generate_from_arb --output-dir=$OUTPUT_PATH --no-use-deferred-loading $APP_LOCALIZATIONS_PATH l10n-translated/*/l10n/intl_messages_*.arb
