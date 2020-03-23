@@ -22,8 +22,10 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "about" : MessageLookupByLibrary.simpleMessage("A proposito"),
+    "appLegalese" : MessageLookupByLibrary.simpleMessage("Made by LRNZ09"),
     "appTitle" : MessageLookupByLibrary.simpleMessage("Click to Chat"),
     "badNews" : MessageLookupByLibrary.simpleMessage("Cattive notizie"),
+    "buyMeACoffee" : MessageLookupByLibrary.simpleMessage("Offrimi un caffè"),
     "call" : MessageLookupByLibrary.simpleMessage("Chiama"),
     "close" : MessageLookupByLibrary.simpleMessage("Chiudi"),
     "copy" : MessageLookupByLibrary.simpleMessage("Copia"),
@@ -32,8 +34,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "homeOpenButton" : MessageLookupByLibrary.simpleMessage("Apri in WhatsApp"),
     "notNow" : MessageLookupByLibrary.simpleMessage("Non adesso"),
     "phoneNumber" : MessageLookupByLibrary.simpleMessage("Numero di telefono"),
+    "rate" : MessageLookupByLibrary.simpleMessage("Valuta"),
     "sendFeedback" : MessageLookupByLibrary.simpleMessage("Invia feedback"),
     "sendSmsMessage" : MessageLookupByLibrary.simpleMessage("Invia messaggio SMS"),
+    "share" : MessageLookupByLibrary.simpleMessage("Condividi"),
     "undo" : MessageLookupByLibrary.simpleMessage("Annulla"),
     "unlock" : MessageLookupByLibrary.simpleMessage("Sblocca")
   };
