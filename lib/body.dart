@@ -87,7 +87,7 @@ class _BodyState extends State<Body> {
                 'Phone permission is required in order to get the country from your SIM card, otherwise the one of your locale will be used in its place'),
             actions: [
               FlatButton(
-                child: Text('Not now'.toUpperCase()),
+                child: Text(AppLocalizations.of(context).notNow.toUpperCase()),
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
@@ -157,7 +157,7 @@ class _BodyState extends State<Body> {
       await showDialog(
         context: context,
         builder: (BuildContext context) => AlertDialog(
-          title: Text('Bad news'),
+          title: Text(AppLocalizations.of(context).badNews),
           content: Text(
               'It seems you don\'t have WhatsApp installed, try again later'),
           actions: [
@@ -199,7 +199,7 @@ class _BodyState extends State<Body> {
     Scaffold.of(context).showSnackBar(
       SnackBar(
         action: SnackBarAction(
-          label: 'Undo'.toUpperCase(),
+          label: (AppLocalizations.of(context).undo).toUpperCase(),
           onPressed: () {
             setState(() {
               _phoneNumberSet.add(phoneNumber);
@@ -364,7 +364,7 @@ class _BodyState extends State<Body> {
                           children: [
                             ListTile(
                               leading: Icon(Mdi.phoneClassic),
-                              title: Text('Call'),
+                              title: Text(AppLocalizations.of(context).call),
                               onTap: () async {
                                 Navigator.pop(context);
 
@@ -374,7 +374,9 @@ class _BodyState extends State<Body> {
                             ),
                             ListTile(
                               leading: Icon(Mdi.messageText),
-                              title: Text('Send SMS message'),
+                              title: Text(
+                                AppLocalizations.of(context).sendSmsMessage,
+                              ),
                               onTap: () async {
                                 Navigator.pop(context);
 
@@ -384,7 +386,7 @@ class _BodyState extends State<Body> {
                             ),
                             ListTile(
                               leading: Icon(Mdi.contentCopy),
-                              title: Text('Copy'),
+                              title: Text(AppLocalizations.of(context).copy),
                               onTap: () {
                                 Navigator.pop(context);
 
@@ -393,7 +395,7 @@ class _BodyState extends State<Body> {
                             ),
                             ListTile(
                               leading: Icon(Mdi.delete),
-                              title: Text('Delete'),
+                              title: Text(AppLocalizations.of(context).delete),
                               onTap: () {
                                 Navigator.pop(context);
 
