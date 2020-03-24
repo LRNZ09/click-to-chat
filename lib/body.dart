@@ -11,6 +11,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:sim_info/sim_info.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
+const _kWHOPhoneNumber = '+41225017655';
+
 class Country {
   final String alpha2Code;
   final String callingCode;
@@ -312,6 +314,20 @@ class _BodyState extends State<Body> {
               ),
             ],
           ),
+        ),
+        ListTile(
+          contentPadding: EdgeInsets.all(16),
+          onTap: () {
+            _onListTileTap(_kWHOPhoneNumber);
+          },
+          onLongPress: () {
+            _copyPhoneNumber(_kWHOPhoneNumber);
+          },
+          title: Text('World Health Organization'),
+          subtitle: Text(
+            'This service will provide you with the latest information and guidance from WHO on the current outbreak of coronavirus disease (COVID-19)',
+          ),
+          leading: Icon(Mdi.earth),
         ),
         ListView.builder(
           shrinkWrap: true,
