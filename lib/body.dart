@@ -7,11 +7,12 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:mdi/mdi.dart';
+import 'package:open_appstore/open_appstore.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sim_info/sim_info.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
-const _kWHOPhoneNumber = '+41225017655';
+const _kWHOPhoneNumber = '+41798931892';
 
 class Country {
   final String alpha2Code;
@@ -146,7 +147,9 @@ class _BodyState extends State<Body> {
   }
 
   void _onListTileTap(phoneNumber) async {
-    var url = 'whatsapp://send?phone=$phoneNumber';
+    var url = phoneNumber == _kWHOPhoneNumber
+        ? 'whatsapp://send?phone=$phoneNumber&text=hi'
+        : 'whatsapp://send?phone=$phoneNumber';
 
     if (await url_launcher.canLaunch(url)) {
       await url_launcher.launch(url);
@@ -156,22 +159,30 @@ class _BodyState extends State<Body> {
         _phoneNumberDateTimeMap[phoneNumber] = DateTime.now();
       });
     } else {
-      await showDialog(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-          title: Text(AppLocalizations.of(context).badNews),
-          content: Text(
-              'It seems you don\'t have WhatsApp installed, try again later'),
-          actions: [
-            FlatButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
+      try {
+        await OpenAppstore.launch(
+          androidAppId: 'com.whatsapp',
+          iOSAppId: '310633997',
+        );
+      } catch (error) {
+        await showDialog(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: Text(AppLocalizations.of(context).badNews),
+            content: Text(
+              'It seems you don\'t have WhatsApp installed, try installing it from the store.',
             ),
-          ],
-        ),
-      );
+            actions: [
+              FlatButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        );
+      }
     }
   }
 
