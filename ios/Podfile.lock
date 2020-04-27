@@ -4,6 +4,8 @@ PODS:
   - Flutter (1.0.0)
   - in_app_purchase (0.0.1):
     - Flutter
+  - open_appstore (0.0.1):
+    - Flutter
   - package_info (0.0.1):
     - Flutter
   - "permission_handler (4.2.0+hotfix.3)":
@@ -25,6 +27,7 @@ DEPENDENCIES:
   - app_review (from `.symlinks/plugins/app_review/ios`)
   - Flutter (from `Flutter`)
   - in_app_purchase (from `.symlinks/plugins/in_app_purchase/ios`)
+  - open_appstore (from `.symlinks/plugins/open_appstore/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
   - share (from `.symlinks/plugins/share/ios`)
@@ -41,6 +44,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   in_app_purchase:
     :path: ".symlinks/plugins/in_app_purchase/ios"
+  open_appstore:
+    :path: ".symlinks/plugins/open_appstore/ios"
   package_info:
     :path: ".symlinks/plugins/package_info/ios"
   permission_handler:
@@ -62,6 +67,7 @@ SPEC CHECKSUMS:
   app_review: 1253f9c1408e4a9708abbcb28bbea969017b2f81
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   in_app_purchase: 6b3a6d6944354f353d59eb1f2a0db3fd7a40917b
+  open_appstore: 4eddfae38848002fdde8d42e1734d16cb34439de
   package_info: 48b108e75b8802c2d5e126f208ef540561c98aef
   permission_handler: 40520ab8ad1bb78a282b832464e995ec87f77ec6
   share: bae0a282aab4483288913fc4dc0b935d4b491f2e
@@ -73,4 +79,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 5182e12990717146ec29ce2a124648691ff3cced
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.9.1
