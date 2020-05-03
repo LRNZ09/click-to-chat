@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:app_review/app_review.dart';
 import 'package:click_to_chat/app_localizations.dart';
-import 'package:click_to_chat/body.dart';
+import 'package:click_to_chat/routes/home/body.dart';
 import 'package:click_to_chat/routes/unlock.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -74,7 +74,7 @@ class _HomeState extends State<Home> {
         child: Row(
           children: [
             IconButton(
-              icon: Icon(Mdi.starFace),
+              icon: Icon(Mdi.star),
               onPressed: () async {
                 await AppReview.writeReview;
               },
@@ -98,7 +98,7 @@ class _HomeState extends State<Home> {
             ),
           ],
         ),
-        notchMargin: 12,
+        notchMargin: 8,
         shape: CircularNotchedRectangle(),
       ),
       floatingActionButton: FloatingActionButton(
@@ -106,7 +106,7 @@ class _HomeState extends State<Home> {
           final route = MaterialPageRoute(builder: (context) => Unlock());
           Navigator.push(context, route);
         },
-        child: Icon(Mdi.lockOpen),
+        child: Icon(Mdi.emoticonHappy),
         tooltip: AppLocalizations.of(context).unlock,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
