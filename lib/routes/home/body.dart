@@ -12,8 +12,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:sim_info/sim_info.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
-const _kWHOPhoneNumber = '+41798931892';
-
 class Country {
   final String alpha2Code;
   final String callingCode;
@@ -147,9 +145,8 @@ class _BodyState extends State<Body> {
   }
 
   void _onListTileTap(phoneNumber) async {
-    var url = phoneNumber == _kWHOPhoneNumber
-        ? 'whatsapp://send?phone=$phoneNumber&text=hi'
-        : 'whatsapp://send?phone=$phoneNumber';
+    // TODO add text param 'whatsapp://send?phone=$phoneNumber&text=hi'
+    var url = 'whatsapp://send?phone=$phoneNumber';
 
     if (await url_launcher.canLaunch(url)) {
       await url_launcher.launch(url);
@@ -325,20 +322,6 @@ class _BodyState extends State<Body> {
               ),
             ],
           ),
-        ),
-        ListTile(
-          contentPadding: EdgeInsets.all(16),
-          onTap: () {
-            _onListTileTap(_kWHOPhoneNumber);
-          },
-          onLongPress: () {
-            _copyPhoneNumber(_kWHOPhoneNumber);
-          },
-          title: Text('World Health Organization'),
-          subtitle: Text(
-            'This service will provide you with the latest information and guidance from WHO on the current outbreak of coronavirus disease (COVID-19)',
-          ),
-          leading: Icon(Mdi.earth),
         ),
         ListView.builder(
           shrinkWrap: true,

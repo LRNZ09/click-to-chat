@@ -7,8 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:mdi/mdi.dart';
 
-const _kProductIdEmoji = {'coffee': '☕️', 'unlock': '🔓'};
-final _kProductIds = _kProductIdEmoji.keys.toSet();
+const _kProductsFallbackData = {
+  'coffee': {
+    'description': 'Support the app developer 👨‍💻',
+    'emoji': '☕️',
+    'title': 'Buy me a coffee',
+  },
+};
+
+final _kProductIds = _kProductsFallbackData.keys.toSet();
 
 class Unlock extends StatefulWidget {
   @override
@@ -152,9 +159,7 @@ class _UnlockState extends State<Unlock> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context).unlock),
-      ),
+      appBar: AppBar(),
       body: Stack(
         children: stack,
       ),
@@ -169,7 +174,7 @@ class _UnlockState extends State<Unlock> {
     final Widget storeHeader = ListTile(
       leading: Icon(
         _isAvailable ? Mdi.check : Mdi.close,
-        color: _isAvailable ? Colors.green : ThemeData.light().errorColor,
+        color: _isAvailable ? Colors.green : Colors.red,
       ),
       title: Text(
         'The store is ' + (_isAvailable ? 'available' : 'unavailable'),
@@ -185,7 +190,7 @@ class _UnlockState extends State<Unlock> {
           title: Text(
             'Not connected',
             style: TextStyle(
-              color: ThemeData.light().errorColor,
+              color: Colors.red,
             ),
           ),
           subtitle: const Text(
@@ -209,7 +214,6 @@ class _UnlockState extends State<Unlock> {
     if (!_isAvailable) {
       return Card(
         child: ListTile(
-          leading: CircularProgressIndicator(),
           title: Text('Cannot connect to the store'),
         ),
       );
@@ -231,10 +235,11 @@ class _UnlockState extends State<Unlock> {
         .map(
           (ProductDetails productDetails) => ListTile(
             title: Text(
-              '${productDetails.title} ${_kProductIdEmoji[productDetails.id]}',
+              '${productDetails.title ?? _kProductsFallbackData[productDetails.id]['title']} ${_kProductsFallbackData[productDetails.id]['emoji']}',
             ),
             subtitle: Text(
-              productDetails.description,
+              productDetails.description ??
+                  _kProductsFallbackData[productDetails.id]['description'],
             ),
             trailing: purchases[productDetails.id] == null
                 ? FlatButton(
