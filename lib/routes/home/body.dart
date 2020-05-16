@@ -50,16 +50,17 @@ class Body extends StatefulWidget {
 enum PopupMenuItemEnum { about, sendFeedback }
 
 class _BodyState extends State<Body> {
-  final _phoneNumberMaxLength = 12;
+  static final _client = http.Client();
+  static final _phoneNumberMaxLength = 12;
 
-  var _countriesFuture = http.get(
+  var _countriesFuture = _client.get(
     'https://restcountries.eu/rest/v2/all?fields=alpha2Code;callingCodes;nativeName',
   );
 
   Country _phoneNumberCountry;
   var _phoneNumber = '';
-  var _phoneNumberSet = Set();
-  var _phoneNumberDateTimeMap = {};
+  final _phoneNumberSet = <String>{};
+  final _phoneNumberDateTimeMap = {};
 
   @override
   void didChangeDependencies() {
@@ -121,12 +122,12 @@ class _BodyState extends State<Body> {
 
     Map<String, dynamic> simCountryMap;
     if (countryCode == null) {
-      final response = await http.get(
+      final response = await _client.get(
         'https://restcountries.eu/rest/v2/lang/${locale.languageCode}?fields=alpha2Code;callingCodes;nativeName',
       );
       simCountryMap = json.decode(response.body)[0];
     } else {
-      final response = await http.get(
+      final response = await _client.get(
         'https://restcountries.eu/rest/v2/alpha/$countryCode?fields=alpha2Code;callingCodes;nativeName',
       );
       simCountryMap = json.decode(response.body);
@@ -263,7 +264,7 @@ class _BodyState extends State<Body> {
                               icon: Icon(Mdi.progressAlert),
                               onPressed: () {
                                 setState(() {
-                                  _countriesFuture = http.get(
+                                  _countriesFuture = _client.get(
                                     'https://restcountries.eu/rest/v2/all?fields=alpha2Code;callingCodes;nativeName',
                                   );
                                 });
