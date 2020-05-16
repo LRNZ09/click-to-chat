@@ -36,8 +36,10 @@ class Country {
         (char) => String.fromCharCode(char[0].codeUnitAt(0) + 127397));
   }
 
+  @override
   int get hashCode => alpha2Code.hashCode;
 
+  @override
   bool operator ==(other) =>
       (other is Country && other.alpha2Code == alpha2Code);
 }
