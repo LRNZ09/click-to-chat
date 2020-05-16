@@ -25,7 +25,13 @@ enum PopupMenuItemEnum { about, sendFeedback }
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
-    final title = Text(widget.title);
+    final title = Text(
+      widget.title,
+      // Provide a Key to this specific Text widget. This allows
+      // identifing the widget from inside the test suite,
+      // and reading the text.
+      key: Key('title'),
+    );
 
     return Scaffold(
       appBar: AppBar(

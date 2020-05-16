@@ -8,9 +8,9 @@ PODS:
     - Flutter
   - package_info (0.0.1):
     - Flutter
-  - "permission_handler (4.2.0+hotfix.3)":
+  - "permission_handler (4.4.0+hotfix.4)":
     - Flutter
-  - share (0.5.2):
+  - share (0.0.1):
     - Flutter
   - sim_info (0.0.1):
     - Flutter
@@ -66,16 +66,16 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   app_review: 1253f9c1408e4a9708abbcb28bbea969017b2f81
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  in_app_purchase: 6b3a6d6944354f353d59eb1f2a0db3fd7a40917b
+  in_app_purchase: 3e2155afa9d03d4fa32d9e62d567885080ce97d6
   open_appstore: 4eddfae38848002fdde8d42e1734d16cb34439de
-  package_info: 48b108e75b8802c2d5e126f208ef540561c98aef
-  permission_handler: 40520ab8ad1bb78a282b832464e995ec87f77ec6
-  share: bae0a282aab4483288913fc4dc0b935d4b491f2e
+  package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
+  permission_handler: 8278954f2382902f63f00dd8828769c0bd6d511b
+  share: 0b2c3e82132f5888bccca3351c504d0003b3b410
   sim_info: 9d8750399533a8eb626fbb7f6fc0776b154de2a6
-  url_launcher: a1c0cc845906122c4784c542523d8cacbded5626
+  url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
   url_launcher_macos: fd7894421cd39320dce5f292fc99ea9270b2a313
   url_launcher_web: e5527357f037c87560776e36436bf2b0288b965c
-  wakelock: bd3dcc6a8bcf53a1c0309780ff192dcee67c6ccb
+  wakelock: 0d4a70faf8950410735e3f61fb15d517c8a6efc4
 
 PODFILE CHECKSUM: 5182e12990717146ec29ce2a124648691ff3cced
 
