@@ -51,7 +51,8 @@ class _UnlockState extends State<Unlock> {
   }
 
   Future<void> _initInAppPurchasesState() async {
-    final bool isAvailable = await _connection.isAvailable();
+    final isAvailable = await _connection.isAvailable();
+
     if (!isAvailable) {
       setState(() {
         _isAvailable = isAvailable;
@@ -63,7 +64,7 @@ class _UnlockState extends State<Unlock> {
       return;
     }
 
-    ProductDetailsResponse productDetailResponse =
+    final productDetailResponse =
         await _connection.queryProductDetails(_kProductIds);
 
     if (productDetailResponse.productDetails.isEmpty) {
@@ -89,15 +90,14 @@ class _UnlockState extends State<Unlock> {
       return;
     }
 
-    final QueryPurchaseDetailsResponse purchaseResponse =
-        await _connection.queryPastPurchases();
+    final purchaseResponse = await _connection.queryPastPurchases();
 
     if (purchaseResponse.error != null) {
       // TODO handle query past purchase error...
     }
 
-    final List<PurchaseDetails> verifiedPurchases = [];
-    for (PurchaseDetails purchase in purchaseResponse.pastPurchases) {
+    final verifiedPurchases = [];
+    for (final purchase in purchaseResponse.pastPurchases) {
       var isValid = _verifyPurchase(purchase);
       if (isValid) {
         verifiedPurchases.add(purchase);
@@ -123,7 +123,7 @@ class _UnlockState extends State<Unlock> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> stack = [];
+    var stack = <Widget>[];
 
     if (_queryProductError != null) {
       stack.add(
@@ -181,7 +181,7 @@ class _UnlockState extends State<Unlock> {
       ),
     );
 
-    final List<Widget> children = <Widget>[storeHeader];
+    final children = <Widget>[storeHeader];
 
     if (!_isAvailable) {
       children.addAll([
@@ -222,8 +222,8 @@ class _UnlockState extends State<Unlock> {
     // This loading previous purchases code is just a demo. Please do not use this as it is.
     // In your app you should always verify the purchase data using the `verificationData` inside the [PurchaseDetails] object before trusting it.
     // We recommend that you use your own server to verity the purchase data.
-    Map<String, PurchaseDetails> purchases =
-        Map.fromEntries(_purchases.map((PurchaseDetails purchase) {
+    var purchases = Map<String, PurchaseDetails>.fromEntries(
+        _purchases.map((PurchaseDetails purchase) {
       if (purchase.pendingCompletePurchase) {
         _connection.completePurchase(purchase);
       }
@@ -231,7 +231,7 @@ class _UnlockState extends State<Unlock> {
       return MapEntry<String, PurchaseDetails>(purchase.productID, purchase);
     }));
 
-    List<ListTile> productList = _products
+    var productList = _products
         .map(
           (ProductDetails productDetails) => ListTile(
             title: Text(

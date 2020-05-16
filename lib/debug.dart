@@ -1,7 +1,7 @@
 /// Whether the VM is running in debug mode.
 bool get isInDebugMode {
   // Assume you're in production mode.
-  bool inDebugMode = false;
+  var inDebugMode = false;
 
   // Assert expressions are only evaluated during development. They are ignored
   // in production. Therefore, this code only sets `inDebugMode` to true

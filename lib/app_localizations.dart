@@ -6,10 +6,11 @@ var SUPPORTED_LOCALES = ['en', 'it'];
 
 class AppLocalizations {
   static Future<AppLocalizations> load(Locale locale) async {
-    final String name = locale.countryCode == null || locale.countryCode.isEmpty
+    final name = locale.countryCode == null || locale.countryCode.isEmpty
         ? locale.languageCode
         : locale.toString();
-    final String localeName = Intl.canonicalizedLocale(name);
+
+    final localeName = Intl.canonicalizedLocale(name);
 
     await initializeMessages(localeName);
 
