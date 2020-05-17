@@ -52,9 +52,17 @@ void main() {
       // await tester.pump();
     });
 
-    testGoldens('responsive layout', (tester) async {
+    testGoldens('devices', (tester) async {
       await tester.pumpWidgetBuilder(App());
-      await multiScreenGolden(tester, 'app');
+
+      await multiScreenGolden(tester, 'app', devices: [
+        Device.phone,
+        Device.phone.dark(),
+        Device.phone.copyWith(name: 'phone_text_scale', textScale: 1.25),
+        Device.iphone11.copyWith(name: 'phone_safe_area'),
+        Device.tabletPortrait,
+        Device.tabletLandscape,
+      ]);
     });
   });
 }
