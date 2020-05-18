@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:mdi/mdi.dart';
 import 'package:open_appstore/open_appstore.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:share/share.dart';
 import 'package:sim_info/sim_info.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
@@ -187,18 +188,19 @@ class _BodyState extends State<Body> {
   }
 
   void _onButtonPressed() {
-    var fullPhoneNumber = '+${_phoneNumberCountry.callingCode}$_phoneNumber';
+    var fullPhoneNumber = '${_phoneNumberCountry.callingCode}$_phoneNumber';
     _onListTileTap(fullPhoneNumber);
   }
 
   void _copyPhoneNumber(String phoneNumber) async {
-    var data = ClipboardData(text: phoneNumber);
+    var text = '+$phoneNumber';
+    var data = ClipboardData(text: text);
     await Clipboard.setData(data);
 
     Scaffold.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          'Phone number $phoneNumber copied to clipboard',
+          'Phone number $text copied to clipboard',
         ),
       ),
     );
@@ -220,7 +222,7 @@ class _BodyState extends State<Body> {
           },
         ),
         content: Text(
-          'Phone number $phoneNumber has been deleted',
+          'Phone number +$phoneNumber has been deleted',
         ),
       ),
     );
@@ -376,24 +378,34 @@ class _BodyState extends State<Body> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             ListTile(
-                              leading: Icon(Mdi.phoneClassic),
+                              leading: Icon(Mdi.shareVariant),
+                              title: Text(AppLocalizations.of(context).share),
+                              onTap: () async {
+                                Navigator.pop(context);
+
+                                var url = 'https://wa.me/$phoneNumber';
+                                await Share.share(url);
+                              },
+                            ),
+                            ListTile(
+                              leading: Icon(Mdi.phone),
                               title: Text(AppLocalizations.of(context).call),
                               onTap: () async {
                                 Navigator.pop(context);
 
-                                var url = 'tel://$phoneNumber';
+                                var url = 'tel://+$phoneNumber';
                                 await url_launcher.launch(url);
                               },
                             ),
                             ListTile(
-                              leading: Icon(Mdi.messageText),
+                              leading: Icon(Mdi.message),
                               title: Text(
                                 AppLocalizations.of(context).sendSmsMessage,
                               ),
                               onTap: () async {
                                 Navigator.pop(context);
 
-                                var url = 'sms://$phoneNumber';
+                                var url = 'sms://+$phoneNumber';
                                 await url_launcher.launch(url);
                               },
                             ),
@@ -421,7 +433,7 @@ class _BodyState extends State<Body> {
                     },
                   );
                 },
-                title: Text(phoneNumber),
+                title: Text('+$phoneNumber'),
                 subtitle: Text(phoneNumberDateTime),
               ),
             );
