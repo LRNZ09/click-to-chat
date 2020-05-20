@@ -54,7 +54,7 @@ enum PopupMenuItemEnum { about, sendFeedback }
 
 class _BodyState extends State<Body> {
   static final _client = http.Client();
-  static final _phoneNumberMaxLength = 12;
+  static final _phoneNumberMaxLength = 16;
 
   var _countriesFuture = _client.get(
     'https://restcountries.eu/rest/v2/all?fields=alpha2Code;callingCodes;nativeName',
@@ -265,18 +265,18 @@ class _BodyState extends State<Body> {
                       labelText: AppLocalizations.of(context).country,
                       suffixIcon: snapshot.hasError
                           ? IconButton(
-                              icon: Icon(Mdi.progressAlert),
+                              icon: Icon(Mdi.alert),
                               onPressed: () {
                                 setState(() {
                                   _countriesFuture = _client.get(
                                     'https://restcountries.eu/rest/v2/all?fields=alpha2Code;callingCodes;nativeName',
                                   );
                                 });
-                              })
+                              },
+                              tooltip: ' Retry',
+                            )
                           : Icon(
-                              snapshot.hasData
-                                  ? Mdi.arrowDownDropCircle
-                                  : Mdi.progressClock,
+                              snapshot.hasData ? Mdi.menuDown : Mdi.loading,
                             ),
                     ),
                     isEmpty: _phoneNumberCountry == null,
