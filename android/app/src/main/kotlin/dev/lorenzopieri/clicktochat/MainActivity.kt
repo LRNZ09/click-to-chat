@@ -1,4 +1,4 @@
-package dev.lorenzopieri.click_to_chat
+package dev.lorenzopieri.clicktochat
 
 import io.flutter.embedding.android.FlutterActivity
 
