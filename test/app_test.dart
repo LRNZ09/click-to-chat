@@ -39,13 +39,17 @@ void main() {
 
       final countryField = find.text('Country');
       final phoneNumberField = find.text('Phone number');
-      final button = find.byIcon(Mdi.whatsapp);
-      final fab = find.byIcon(Mdi.emoticonHappy);
+      final buttonIcon = find.byIcon(Mdi.whatsapp);
+      final reviewIcon = find.byIcon(Mdi.star);
+      final shareIcon = find.byIcon(Mdi.shareVariant);
+      final fabIcon = find.byIcon(Mdi.emoticonHappy);
 
       expect(countryField, findsOneWidget);
       expect(phoneNumberField, findsOneWidget);
-      expect(button, findsOneWidget);
-      expect(fab, findsOneWidget);
+      expect(buttonIcon, findsOneWidget);
+      expect(reviewIcon, findsOneWidget);
+      expect(shareIcon, findsOneWidget);
+      expect(fabIcon, findsOneWidget);
 
       // TODO Verify that our button is disabled
       // await tester.tap(button);
@@ -58,8 +62,6 @@ void main() {
       await multiScreenGolden(tester, 'app', devices: [
         Device.phone,
         Device.phone.dark(),
-        Device.phone.copyWith(name: 'phone_text_scale', textScale: 1.25),
-        Device.iphone11.copyWith(name: 'phone_safe_area'),
         Device.tabletPortrait,
         Device.tabletLandscape,
       ]);
