@@ -94,11 +94,12 @@ class _UnlockState extends State<Unlock> {
 
     if (purchaseResponse.error != null) {
       // TODO handle query past purchase error...
+      return;
     }
 
-    final verifiedPurchases = [];
+    final verifiedPurchases = <PurchaseDetails>[];
     for (final purchase in purchaseResponse.pastPurchases) {
-      var isValid = _verifyPurchase(purchase);
+      final isValid = _verifyPurchase(purchase);
       if (isValid) {
         verifiedPurchases.add(purchase);
       }
@@ -222,8 +223,8 @@ class _UnlockState extends State<Unlock> {
     // This loading previous purchases code is just a demo. Please do not use this as it is.
     // In your app you should always verify the purchase data using the `verificationData` inside the [PurchaseDetails] object before trusting it.
     // We recommend that you use your own server to verity the purchase data.
-    var purchases = Map<String, PurchaseDetails>.fromEntries(
-        _purchases.map((PurchaseDetails purchase) {
+    final purchases =
+        Map.fromEntries(_purchases.map((PurchaseDetails purchase) {
       if (purchase.pendingCompletePurchase) {
         _connection.completePurchase(purchase);
       }
@@ -231,7 +232,7 @@ class _UnlockState extends State<Unlock> {
       return MapEntry<String, PurchaseDetails>(purchase.productID, purchase);
     }));
 
-    var productList = _products
+    final productList = _products
         .map(
           (ProductDetails productDetails) => ListTile(
             title: Text(
@@ -252,7 +253,7 @@ class _UnlockState extends State<Unlock> {
                         sandboxTesting: isInDebugMode,
                       );
 
-                      _connection.buyNonConsumable(
+                      _connection.buyConsumable(
                         purchaseParam: purchaseParam,
                       );
                     },
@@ -308,7 +309,7 @@ class _UnlockState extends State<Unlock> {
           return;
 
         case PurchaseStatus.purchased:
-          var isValid = _verifyPurchase(purchaseDetails);
+          final isValid = _verifyPurchase(purchaseDetails);
           if (isValid) {
             setState(() {
               _purchases.add(purchaseDetails);
