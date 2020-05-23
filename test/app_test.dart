@@ -37,19 +37,12 @@ void main() {
       await tester.pumpWidget(App());
       await tester.pumpAndSettle();
 
-      final countryField = find.text('Country');
-      final phoneNumberField = find.text('Phone number');
-      final buttonIcon = find.byIcon(Mdi.whatsapp);
-      final reviewIcon = find.byIcon(Mdi.star);
-      final shareIcon = find.byIcon(Mdi.shareVariant);
-      final fabIcon = find.byIcon(Mdi.emoticonHappy);
-
-      expect(countryField, findsOneWidget);
-      expect(phoneNumberField, findsOneWidget);
-      expect(buttonIcon, findsOneWidget);
-      expect(reviewIcon, findsOneWidget);
-      expect(shareIcon, findsOneWidget);
-      expect(fabIcon, findsOneWidget);
+      expect(find.text('Country'), findsOneWidget);
+      expect(find.text('Phone number'), findsOneWidget);
+      expect(find.byIcon(Mdi.whatsapp), findsOneWidget);
+      expect(find.byIcon(Mdi.star), findsOneWidget);
+      expect(find.byIcon(Mdi.shareVariant), findsOneWidget);
+      expect(find.byIcon(Mdi.emoticonHappy), findsOneWidget);
 
       // TODO Verify that our button is disabled
       // await tester.tap(button);

@@ -10,6 +10,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final primarySwatch = Colors.green;
+    final darkAccentColor = Color.fromRGBO(37, 211, 102, 1);
 
     final theme = ThemeData(
       brightness: Brightness.light,
@@ -19,6 +20,7 @@ class App extends StatelessWidget {
     final darkTheme = ThemeData(
       brightness: Brightness.dark,
       primarySwatch: primarySwatch,
+      accentColor: darkAccentColor,
     );
 
     return MaterialApp(

@@ -47,6 +47,11 @@ class _HomeState extends State<Home> {
                   var packageInfo = await PackageInfo.fromPlatform();
                   showAboutDialog(
                     context: context,
+                    applicationIcon: Image.asset(
+                      'assets/icons/icon-android.png',
+                      height: 52,
+                      width: 52,
+                    ),
                     applicationName: widget.title,
                     applicationVersion:
                         'Version ${packageInfo.version} build ${packageInfo.buildNumber}',
