@@ -13,7 +13,7 @@ description: 'Click to Chat'
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.7.2+25
+version: 1.7.3+26
 
 environment:
   sdk: '>=2.2.2 <3.0.0'
@@ -60,7 +60,6 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   # To add assets to your application, add an assets section, like this:
-  # ! https://github.com/eBay/flutter_glove_box/issues/31
   assets:
     - assets/
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -92,5 +91,5 @@ flutter_icons:
   ios: true # can specify file name here e.g. "My-Launcher-Icon"
   image_path_android: 'assets/icons/icon-android.png'
   image_path_ios: 'assets/icons/icon-ios.png'
-  adaptive_icon_background: '#4CAF50' # only available for Android 8.0 devices and above
+  adaptive_icon_background: '#25D366' # only available for Android 8.0 devices and above
   adaptive_icon_foreground: 'assets/icons/adaptive-icon-foreground.png' # only available for Android 8.0 devices and above
