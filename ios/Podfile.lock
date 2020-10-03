@@ -4,21 +4,17 @@ PODS:
   - Flutter (1.0.0)
   - in_app_purchase (0.0.1):
     - Flutter
-  - open_appstore (0.0.1):
-    - Flutter
   - package_info (0.0.1):
     - Flutter
-  - "permission_handler (4.4.0+hotfix.4)":
+  - "permission_handler (5.0.1+1)":
     - Flutter
   - share (0.0.1):
     - Flutter
   - sim_info (0.0.1):
     - Flutter
+  - store_redirect (0.0.1):
+    - Flutter
   - url_launcher (0.0.1):
-    - Flutter
-  - url_launcher_macos (0.0.1):
-    - Flutter
-  - url_launcher_web (0.0.1):
     - Flutter
   - wakelock (0.0.1):
     - Flutter
@@ -27,14 +23,12 @@ DEPENDENCIES:
   - app_review (from `.symlinks/plugins/app_review/ios`)
   - Flutter (from `Flutter`)
   - in_app_purchase (from `.symlinks/plugins/in_app_purchase/ios`)
-  - open_appstore (from `.symlinks/plugins/open_appstore/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
   - share (from `.symlinks/plugins/share/ios`)
   - sim_info (from `.symlinks/plugins/sim_info/ios`)
+  - store_redirect (from `.symlinks/plugins/store_redirect/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
-  - url_launcher_macos (from `.symlinks/plugins/url_launcher_macos/ios`)
-  - url_launcher_web (from `.symlinks/plugins/url_launcher_web/ios`)
   - wakelock (from `.symlinks/plugins/wakelock/ios`)
 
 EXTERNAL SOURCES:
@@ -44,8 +38,6 @@ EXTERNAL SOURCES:
     :path: Flutter
   in_app_purchase:
     :path: ".symlinks/plugins/in_app_purchase/ios"
-  open_appstore:
-    :path: ".symlinks/plugins/open_appstore/ios"
   package_info:
     :path: ".symlinks/plugins/package_info/ios"
   permission_handler:
@@ -54,29 +46,25 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/share/ios"
   sim_info:
     :path: ".symlinks/plugins/sim_info/ios"
+  store_redirect:
+    :path: ".symlinks/plugins/store_redirect/ios"
   url_launcher:
     :path: ".symlinks/plugins/url_launcher/ios"
-  url_launcher_macos:
-    :path: ".symlinks/plugins/url_launcher_macos/ios"
-  url_launcher_web:
-    :path: ".symlinks/plugins/url_launcher_web/ios"
   wakelock:
     :path: ".symlinks/plugins/wakelock/ios"
 
 SPEC CHECKSUMS:
-  app_review: 1253f9c1408e4a9708abbcb28bbea969017b2f81
+  app_review: 6f51001269c59a2f4a5b5ae68b7d106401152764
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   in_app_purchase: 3e2155afa9d03d4fa32d9e62d567885080ce97d6
-  open_appstore: 4eddfae38848002fdde8d42e1734d16cb34439de
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
-  permission_handler: 8278954f2382902f63f00dd8828769c0bd6d511b
+  permission_handler: eac8e15b4a1a3fba55b761d19f3f4e6b005d15b6
   share: 0b2c3e82132f5888bccca3351c504d0003b3b410
   sim_info: 9d8750399533a8eb626fbb7f6fc0776b154de2a6
+  store_redirect: 2977747cf81689a39bd62c248c2deacb7a0d131e
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
-  url_launcher_macos: fd7894421cd39320dce5f292fc99ea9270b2a313
-  url_launcher_web: e5527357f037c87560776e36436bf2b0288b965c
   wakelock: 0d4a70faf8950410735e3f61fb15d517c8a6efc4
 
-PODFILE CHECKSUM: 5182e12990717146ec29ce2a124648691ff3cced
+PODFILE CHECKSUM: f57c6a8ab593910b453d3da49b877544b4824a02
 
 COCOAPODS: 1.9.3
