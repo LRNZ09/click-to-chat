@@ -7,10 +7,10 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:mdi/mdi.dart';
-import 'package:open_appstore/open_appstore.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share/share.dart';
 import 'package:sim_info/sim_info.dart';
+import 'package:store_redirect/store_redirect.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
 class Country {
@@ -79,17 +79,16 @@ class _BodyState extends State<Body> {
     var countryCode = locale.countryCode;
 
     try {
-      final shouldShowPermissionDialog = await PermissionHandler()
-          .shouldShowRequestPermissionRationale(PermissionGroup.phone);
-
       var shouldAskPermission = true;
-      if (shouldShowPermissionDialog) {
+
+      if (await Permission.phone.shouldShowRequestRationale) {
         shouldAskPermission = await showDialog(
           barrierDismissible: false,
           context: context,
           builder: (BuildContext context) => AlertDialog(
             content: Text(
-                'Phone permission is required in order to get the country from your SIM card, otherwise the one of your locale will be used in its place'),
+              'Phone permission is required in order to get the country from your SIM card, otherwise the one of your locale will be used in its place',
+            ),
             actions: [
               FlatButton(
                 child: Text(AppLocalizations.of(context).notNow.toUpperCase()),
@@ -109,11 +108,14 @@ class _BodyState extends State<Body> {
       }
 
       if (shouldAskPermission) {
-        final permissions = await PermissionHandler()
-            .requestPermissions([PermissionGroup.phone]);
+        if (await Permission.phone.isPermanentlyDenied) {
+          await openAppSettings();
+          return;
+        }
 
-        if (permissions[PermissionGroup.phone] == PermissionStatus.granted ||
-            permissions[PermissionGroup.phone] == PermissionStatus.unknown) {
+        final permission = await Permission.phone.request();
+
+        if (permission.isGranted) {
           final simCountryCode = await SimInfo.getIsoCountryCode;
           if (simCountryCode.isNotEmpty) countryCode = simCountryCode;
         }
@@ -149,7 +151,7 @@ class _BodyState extends State<Body> {
   }
 
   void _onListTileTap(phoneNumber) async {
-    // TODO add text param 'whatsapp://send?phone=$phoneNumber&text=hi'
+    // TODO add text param 'whatsapp://send?phone=$phoneNumber&text=42'
     var url = 'whatsapp://send?phone=$phoneNumber';
 
     if (await url_launcher.canLaunch(url)) {
@@ -160,30 +162,34 @@ class _BodyState extends State<Body> {
         _phoneNumberDateTimeMap[phoneNumber] = DateTime.now();
       });
     } else {
-      try {
-        await OpenAppstore.launch(
-          androidAppId: 'com.whatsapp',
-          iOSAppId: '310633997',
-        );
-      } catch (error) {
-        await showDialog(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            title: Text(AppLocalizations.of(context).badNews),
-            content: Text(
-              'It seems you don\'t have WhatsApp installed, try installing it from the store.',
-            ),
-            actions: [
-              FlatButton(
-                child: Text('OK'),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ],
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: Text(AppLocalizations.of(context).badNews),
+          content: Text(
+            'It seems you don\'t have WhatsApp installed, try installing it from the store.',
           ),
-        );
-      }
+          actions: [
+            FlatButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () async {
+                try {
+                  await StoreRedirect.redirect(
+                    androidAppId: 'com.whatsapp',
+                    iOSAppId: '310633997',
+                  );
+                } catch (_) {}
+              },
+            ),
+          ],
+        ),
+      );
     }
   }
 

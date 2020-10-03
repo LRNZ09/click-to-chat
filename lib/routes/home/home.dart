@@ -87,7 +87,7 @@ class _HomeState extends State<Home> {
             IconButton(
               icon: Icon(Mdi.star),
               onPressed: () async {
-                await AppReview.writeReview;
+                await AppReview.requestReview;
               },
               tooltip: AppLocalizations.of(context).rate,
             ),
@@ -113,11 +113,11 @@ class _HomeState extends State<Home> {
         shape: CircularNotchedRectangle(),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          final route = MaterialPageRoute(builder: (context) => Unlock());
-          Navigator.push(context, route);
-        },
         child: Icon(Mdi.emoticonHappy),
+        onPressed: () async {
+          final route = MaterialPageRoute(builder: (context) => Unlock());
+          await Navigator.push(context, route);
+        },
         tooltip: AppLocalizations.of(context).unlock,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
