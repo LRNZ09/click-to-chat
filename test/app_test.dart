@@ -1,38 +1,55 @@
+import 'package:dio/adapter.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
 import 'package:mdi/mdi.dart';
-import 'package:nock/nock.dart';
 
 import 'package:click_to_chat/app.dart';
+import 'package:click_to_chat/routes/home/body.dart';
 
-final COUNTRIES_BASE_URL = 'https://restcountries.eu/rest/v2';
-final COUNTRY_CODE = 'US';
-final COUNTRY_PARAMS = '?fields=alpha2Code;callingCodes;nativeName';
+class MockAdapter extends HttpClientAdapter {
+  final _adapter = DefaultHttpClientAdapter();
+
+  @override
+  Future<ResponseBody> fetch(
+    RequestOptions options,
+    Stream<List<int>> requestStream,
+    Future cancelFuture,
+  ) async {
+    switch (options.path) {
+      case '/all':
+        return ResponseBody.fromString(
+          '[{"alpha2Code":"US","callingCodes":["1"],"nativeName":"United States"}]',
+          200,
+          headers: {
+            Headers.contentTypeHeader: [Headers.jsonContentType],
+          },
+        );
+      case '/alpha/US':
+        return ResponseBody.fromString(
+          '{"alpha2Code":"US","callingCodes":["1"],"nativeName":"United States"}',
+          200,
+          headers: {
+            Headers.contentTypeHeader: [Headers.jsonContentType],
+          },
+        );
+      default:
+        return ResponseBody.fromString('', 204);
+    }
+  }
+
+  @override
+  void close({bool force = false}) {
+    _adapter.close(force: force);
+  }
+}
 
 void main() {
   setUpAll(() {
-    nock.init();
-  });
-
-  setUp(() {
-    nock.cleanAll();
+    countriesDio.httpClientAdapter = MockAdapter();
   });
 
   group('App', () {
-    setUp(() {
-      final countriesScope = nock(COUNTRIES_BASE_URL);
-
-      final allCountriesPath = '/all$COUNTRY_PARAMS';
-      countriesScope.get(allCountriesPath)..replay(200, '[]');
-
-      final phoneCountryPath = '/alpha/$COUNTRY_CODE$COUNTRY_PARAMS';
-      countriesScope.get(phoneCountryPath)
-        ..replay(
-          200,
-          '{"alpha2Code":"US","callingCodes":["1"],"nativeName":"United States"}',
-        );
-    });
-
     testWidgets('widgets', (tester) async {
       await tester.pumpWidget(App());
       await tester.pumpAndSettle();
@@ -56,7 +73,9 @@ void main() {
         Device.phone,
         Device.phone.dark(),
         Device.tabletPortrait,
+        Device.tabletPortrait.dark(),
         Device.tabletLandscape,
+        Device.tabletLandscape.dark(),
       ]);
     });
   });

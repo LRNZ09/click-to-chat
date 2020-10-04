@@ -3,12 +3,14 @@ import 'dart:async';
 import 'package:click_to_chat/app.dart';
 import 'package:click_to_chat/debug.dart';
 import 'package:click_to_chat/sentry.dart';
-import 'package:flutter/gestures.dart';
+// import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:wakelock/wakelock.dart';
 
 void main() {
+  // GestureBinding.instance.resamplingEnabled = true;
+
   // This captures errors reported by the Flutter framework.
   FlutterError.onError = _onFlutterError;
 
@@ -17,8 +19,6 @@ void main() {
 }
 
 void _runApp() {
-  GestureBinding.instance.resamplingEnabled = true;
-
   // For play billing library 2.0 on Android, it is mandatory to call
   // [enablePendingPurchases](https://developer.android.com/reference/com/android/billingclient/api/BillingClient.Builder.html#enablependingpurchases)
   // as part of initializing the app.
