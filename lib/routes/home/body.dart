@@ -1,10 +1,9 @@
-import 'dart:convert';
-
 import 'package:click_to_chat/app_localizations.dart';
+import 'package:dio/dio.dart';
+import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:mdi/mdi.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -12,6 +11,19 @@ import 'package:share/share.dart';
 import 'package:sim_info/sim_info.dart';
 import 'package:store_redirect/store_redirect.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
+
+final countriesDio = Dio(
+  BaseOptions(
+    baseUrl: 'https://restcountries.eu/rest/v2',
+    receiveTimeout: 5000,
+  ),
+)..interceptors.add(
+    DioCacheManager(
+      CacheConfig(
+        defaultMaxStale: Duration(days: 14),
+      ),
+    ).interceptor,
+  );
 
 class Country {
   final String alpha2Code;
@@ -53,11 +65,13 @@ class Body extends StatefulWidget {
 enum PopupMenuItemEnum { about, sendFeedback }
 
 class _BodyState extends State<Body> {
-  static final _client = http.Client();
   static final _phoneNumberMaxLength = 16;
 
-  var _countriesFuture = _client.get(
-    'https://restcountries.eu/rest/v2/all?fields=alpha2Code;callingCodes;nativeName',
+  var _countriesFuture = countriesDio.get(
+    '/all',
+    queryParameters: {
+      'fields': 'alpha2Code;callingCodes;nativeName',
+    },
   );
 
   Country _phoneNumberCountry;
@@ -127,15 +141,21 @@ class _BodyState extends State<Body> {
 
     Map<String, dynamic> simCountryMap;
     if (countryCode == null) {
-      final response = await _client.get(
-        'https://restcountries.eu/rest/v2/lang/${locale.languageCode}?fields=alpha2Code;callingCodes;nativeName',
+      final response = await countriesDio.get(
+        '/lang/${locale.languageCode}',
+        queryParameters: {
+          'fields': 'alpha2Code;callingCodes;nativeName',
+        },
       );
-      simCountryMap = json.decode(response.body)[0];
+      simCountryMap = response.data[0];
     } else {
-      final response = await _client.get(
-        'https://restcountries.eu/rest/v2/alpha/$countryCode?fields=alpha2Code;callingCodes;nativeName',
+      final response = await countriesDio.get(
+        '/alpha/$countryCode',
+        queryParameters: {
+          'fields': 'alpha2Code;callingCodes;nativeName',
+        },
       );
-      simCountryMap = json.decode(response.body);
+      simCountryMap = response.data;
     }
 
     final simCountry = Country.fromJson(simCountryMap);
@@ -179,6 +199,8 @@ class _BodyState extends State<Body> {
             FlatButton(
               child: Text('OK'),
               onPressed: () async {
+                Navigator.pop(context);
+
                 try {
                   await StoreRedirect.redirect(
                     androidAppId: 'com.whatsapp',
@@ -245,11 +267,9 @@ class _BodyState extends State<Body> {
             children: [
               FutureBuilder(
                 future: _countriesFuture,
-                builder: (context, AsyncSnapshot<http.Response> snapshot) {
+                builder: (context, AsyncSnapshot<Response> snapshot) {
                   var countries = [];
-                  if (snapshot.hasData) {
-                    countries = json.decode(snapshot.data.body);
-                  }
+                  if (snapshot.hasData) countries = snapshot.data.data;
 
                   var items = countries
                       .map((countryMap) => Country.fromJson(countryMap))
@@ -274,8 +294,12 @@ class _BodyState extends State<Body> {
                               icon: Icon(Mdi.alert),
                               onPressed: () {
                                 setState(() {
-                                  _countriesFuture = _client.get(
-                                    'https://restcountries.eu/rest/v2/all?fields=alpha2Code;callingCodes;nativeName',
+                                  _countriesFuture = countriesDio.get(
+                                    '/all',
+                                    queryParameters: {
+                                      'fields':
+                                          'alpha2Code;callingCodes;nativeName',
+                                    },
                                   );
                                 });
                               },

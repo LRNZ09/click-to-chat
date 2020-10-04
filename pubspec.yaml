@@ -20,11 +20,12 @@ environment:
 
 dependencies:
   app_review: ^2.0.1
+  dio: ^3.0.10
+  dio_http_cache: ^0.2.11
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  http: any
   in_app_purchase: ^0.3.4+10
   intl: ^0.16.1
   mdi: ^4.0.0
@@ -43,12 +44,10 @@ dev_dependencies:
   flutter_launcher_icons: ^0.7.4
   flutter_test:
     sdk: flutter
-  golden_toolkit: ^0.3.2
+  golden_toolkit: ^0.6.0
   intl_translation: ^0.17.9
-  mockito: any
-  nock: any
   pedantic: ^1.8.0
-  test: any
+  test: ^1.15.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
