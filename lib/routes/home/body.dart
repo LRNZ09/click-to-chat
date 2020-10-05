@@ -67,23 +67,44 @@ enum PopupMenuItemEnum { about, sendFeedback }
 class _BodyState extends State<Body> {
   static final _phoneNumberMaxLength = 16;
 
-  var _countriesFuture = countriesDio.get(
-    '/all',
-    queryParameters: {
-      'fields': 'alpha2Code;callingCodes;nativeName',
-    },
-  );
-
-  Country _phoneNumberCountry;
-  var _phoneNumber = '';
+  final _countriesCancelToken = CancelToken();
   final _phoneNumberSet = <String>{};
   final _phoneNumberDateTimeMap = {};
 
+  Future<Response> _countriesFuture;
+  Country _phoneNumberCountry;
+
+  var _phoneNumber = '';
+
+  @override
+  void initState() {
+    super.initState();
+
+    _countriesFuture = countriesDio.get(
+      '/all',
+      cancelToken: _countriesCancelToken,
+      queryParameters: {
+        'fields': 'alpha2Code;callingCodes;nativeName',
+      },
+    );
+  }
+
   @override
   void didChangeDependencies() {
+    print('didChangeDependencies');
+
     _initPhoneNumberCountry();
 
     super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    print('dispose');
+
+    _countriesCancelToken.cancel('dispose');
+
+    super.dispose();
   }
 
   void _initPhoneNumberCountry() async {
@@ -92,6 +113,7 @@ class _BodyState extends State<Body> {
     final locale = Localizations.localeOf(context);
     var countryCode = locale.countryCode;
 
+    Map<String, dynamic> simCountryMap;
     try {
       var shouldAskPermission = true;
 
@@ -128,37 +150,46 @@ class _BodyState extends State<Body> {
         }
 
         final permission = await Permission.phone.request();
-
         if (permission.isGranted) {
           final simCountryCode = await SimInfo.getIsoCountryCode;
           if (simCountryCode.isNotEmpty) countryCode = simCountryCode;
         }
+      }
+
+      print('simCountryMap');
+
+      if (countryCode == null) {
+        final response = await countriesDio.get(
+          '/lang/${locale.languageCode}',
+          cancelToken: _countriesCancelToken,
+          queryParameters: {
+            'fields': 'alpha2Code;callingCodes;nativeName',
+          },
+        );
+        simCountryMap = response.data[0];
+      } else {
+        final response = await countriesDio.get(
+          '/alpha/$countryCode',
+          cancelToken: _countriesCancelToken,
+          queryParameters: {
+            'fields': 'alpha2Code;callingCodes;nativeName',
+          },
+        );
+        simCountryMap = response.data;
       }
     } catch (error) {
       // TODO show dialog?
       print(error);
     }
 
-    Map<String, dynamic> simCountryMap;
-    if (countryCode == null) {
-      final response = await countriesDio.get(
-        '/lang/${locale.languageCode}',
-        queryParameters: {
-          'fields': 'alpha2Code;callingCodes;nativeName',
-        },
-      );
-      simCountryMap = response.data[0];
-    } else {
-      final response = await countriesDio.get(
-        '/alpha/$countryCode',
-        queryParameters: {
-          'fields': 'alpha2Code;callingCodes;nativeName',
-        },
-      );
-      simCountryMap = response.data;
-    }
+    final simCountry = simCountryMap != null
+        ? Country.fromJson(simCountryMap)
+        : Country(
+            alpha2Code: 'US',
+            callingCode: '1',
+            nativeName: 'United States',
+          );
 
-    final simCountry = Country.fromJson(simCountryMap);
     setState(() {
       _phoneNumberCountry = simCountry;
     });
@@ -296,6 +327,7 @@ class _BodyState extends State<Body> {
                                 setState(() {
                                   _countriesFuture = countriesDio.get(
                                     '/all',
+                                    cancelToken: _countriesCancelToken,
                                     queryParameters: {
                                       'fields':
                                           'alpha2Code;callingCodes;nativeName',

@@ -1,13 +1,12 @@
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:golden_toolkit/golden_toolkit.dart';
 import 'package:mdi/mdi.dart';
 
 import 'package:click_to_chat/app.dart';
 import 'package:click_to_chat/routes/home/body.dart';
 
-class MockAdapter extends HttpClientAdapter {
+class MockHttpClientAdapter extends HttpClientAdapter {
   final _adapter = DefaultHttpClientAdapter();
 
   @override
@@ -46,7 +45,7 @@ class MockAdapter extends HttpClientAdapter {
 
 void main() {
   setUpAll(() {
-    countriesDio.httpClientAdapter = MockAdapter();
+    countriesDio.httpClientAdapter = MockHttpClientAdapter();
   });
 
   group('App', () {
@@ -66,17 +65,11 @@ void main() {
       // await tester.pump();
     });
 
-    testGoldens('devices', (tester) async {
-      await tester.pumpWidgetBuilder(App());
+    testWidgets('goldens', (tester) async {
+      await tester.pumpWidget(App());
+      await tester.pumpAndSettle();
 
-      await multiScreenGolden(tester, 'app', devices: [
-        Device.phone,
-        Device.phone.dark(),
-        Device.tabletPortrait,
-        Device.tabletPortrait.dark(),
-        Device.tabletLandscape,
-        Device.tabletLandscape.dark(),
-      ]);
+      await expectLater(find.byType(App), matchesGoldenFile('goldens/app.png'));
     });
   });
 }
