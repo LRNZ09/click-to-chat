@@ -91,8 +91,6 @@ class _BodyState extends State<Body> {
 
   @override
   void didChangeDependencies() {
-    print('didChangeDependencies');
-
     _initPhoneNumberCountry();
 
     super.didChangeDependencies();
@@ -100,8 +98,6 @@ class _BodyState extends State<Body> {
 
   @override
   void dispose() {
-    print('dispose');
-
     _countriesCancelToken.cancel('dispose');
 
     super.dispose();
@@ -156,8 +152,6 @@ class _BodyState extends State<Body> {
         }
       }
 
-      print('simCountryMap');
-
       if (countryCode == null) {
         final response = await countriesDio.get(
           '/lang/${locale.languageCode}',
@@ -178,17 +172,22 @@ class _BodyState extends State<Body> {
         simCountryMap = response.data;
       }
     } catch (error) {
-      // TODO show dialog?
-      print(error);
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'An error occurred while trying to get your country info',
+          ),
+        ),
+      );
     }
 
-    final simCountry = simCountryMap != null
-        ? Country.fromJson(simCountryMap)
-        : Country(
+    final simCountry = simCountryMap == null
+        ? Country(
             alpha2Code: 'US',
             callingCode: '1',
             nativeName: 'United States',
-          );
+          )
+        : Country.fromJson(simCountryMap);
 
     setState(() {
       _phoneNumberCountry = simCountry;
