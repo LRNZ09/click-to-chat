@@ -49,20 +49,21 @@ void main() {
   });
 
   group('App', () {
-    testWidgets('widgets', (tester) async {
+    testWidgets('texts', (tester) async {
       await tester.pumpWidget(App());
       await tester.pumpAndSettle();
 
       expect(find.text('Country'), findsOneWidget);
       expect(find.text('Phone number'), findsOneWidget);
+    });
+    testWidgets('icons', (tester) async {
+      await tester.pumpWidget(App());
+      await tester.pumpAndSettle();
+
       expect(find.byIcon(Mdi.whatsapp), findsOneWidget);
       expect(find.byIcon(Mdi.star), findsOneWidget);
       expect(find.byIcon(Mdi.shareVariant), findsOneWidget);
       expect(find.byIcon(Mdi.emoticonHappy), findsOneWidget);
-
-      // TODO Verify that our button is disabled
-      // await tester.tap(button);
-      // await tester.pump();
     });
 
     testWidgets('goldens', (tester) async {
