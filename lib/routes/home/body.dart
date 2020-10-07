@@ -1,4 +1,3 @@
-import 'package:click_to_chat/app_localizations.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/foundation.dart';
@@ -11,6 +10,8 @@ import 'package:share/share.dart';
 import 'package:sim_info/sim_info.dart';
 import 'package:store_redirect/store_redirect.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
+
+import '../../app_localizations.dart';
 
 final countriesDio = Dio(
   BaseOptions(
@@ -25,6 +26,7 @@ final countriesDio = Dio(
     ).interceptor,
   );
 
+@immutable
 class Country {
   final String alpha2Code;
   final String callingCode;
@@ -53,7 +55,7 @@ class Country {
   int get hashCode => alpha2Code.hashCode;
 
   @override
-  bool operator ==(other) =>
+  bool operator ==(dynamic other) =>
       (other is Country && other.alpha2Code == alpha2Code);
 }
 
@@ -61,8 +63,6 @@ class Body extends StatefulWidget {
   @override
   _BodyState createState() => _BodyState();
 }
-
-enum PopupMenuItemEnum { about, sendFeedback }
 
 class _BodyState extends State<Body> {
   static final _phoneNumberMaxLength = 16;
@@ -117,7 +117,7 @@ class _BodyState extends State<Body> {
         shouldAskPermission = await showDialog(
           barrierDismissible: false,
           context: context,
-          builder: (BuildContext context) => AlertDialog(
+          builder: (context) => AlertDialog(
             content: Text(
               'Phone permission is required in order to get the country from your SIM card, otherwise the one of your locale will be used in its place',
             ),
@@ -171,7 +171,7 @@ class _BodyState extends State<Body> {
         );
         simCountryMap = response.data;
       }
-    } catch (error) {
+    } on dynamic {
       Scaffold.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -214,7 +214,7 @@ class _BodyState extends State<Body> {
     } else {
       await showDialog(
         context: context,
-        builder: (BuildContext context) => AlertDialog(
+        builder: (context) => AlertDialog(
           title: Text(AppLocalizations.of(context).badNews),
           content: Text(
             'It seems you don\'t have WhatsApp installed, try installing it from the store.',
@@ -236,7 +236,7 @@ class _BodyState extends State<Body> {
                     androidAppId: 'com.whatsapp',
                     iOSAppId: '310633997',
                   );
-                } catch (_) {}
+                } on dynamic {}
               },
             ),
           ],
@@ -297,6 +297,7 @@ class _BodyState extends State<Body> {
             children: [
               FutureBuilder(
                 future: _countriesFuture,
+                // ignore: avoid_types_on_closure_parameters
                 builder: (context, AsyncSnapshot<Response> snapshot) {
                   var countries = [];
                   if (snapshot.hasData) countries = snapshot.data.data;
@@ -433,7 +434,7 @@ class _BodyState extends State<Body> {
                 onLongPress: () {
                   showModalBottomSheet(
                     context: context,
-                    builder: (BuildContext context) {
+                    builder: (context) {
                       return SafeArea(
                         child: Column(
                           mainAxisSize: MainAxisSize.min,

@@ -1,11 +1,12 @@
 import 'dart:async';
 
-import 'package:click_to_chat/app_localizations.dart';
-import 'package:click_to_chat/debug.dart';
-import 'package:click_to_chat/sentry.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:mdi/mdi.dart';
+
+import '../app_localizations.dart';
+import '../debug.dart';
+import '../sentry.dart';
 
 const _kProductsFallbackData = {
   'coffee': {
@@ -178,7 +179,7 @@ class _UnlockState extends State<Unlock> {
         color: _isAvailable ? Colors.green : Colors.red,
       ),
       title: Text(
-        'The store is ' + (_isAvailable ? 'available' : 'unavailable'),
+        'The store is ${_isAvailable ? 'available' : 'unavailable'}',
       ),
     );
 
@@ -220,11 +221,7 @@ class _UnlockState extends State<Unlock> {
       );
     }
 
-    // This loading previous purchases code is just a demo. Please do not use this as it is.
-    // In your app you should always verify the purchase data using the `verificationData` inside the [PurchaseDetails] object before trusting it.
-    // We recommend that you use your own server to verity the purchase data.
-    final purchases =
-        Map.fromEntries(_purchases.map((PurchaseDetails purchase) {
+    final purchases = Map.fromEntries(_purchases.map((purchase) {
       if (purchase.pendingCompletePurchase) {
         _connection.completePurchase(purchase);
       }
@@ -234,7 +231,7 @@ class _UnlockState extends State<Unlock> {
 
     final productList = _products
         .map(
-          (ProductDetails productDetails) => ListTile(
+          (productDetails) => ListTile(
             title: Text(
               '${productDetails.title ?? _kProductsFallbackData[productDetails.id]['title']} ${_kProductsFallbackData[productDetails.id]['emoji']}',
             ),
@@ -275,7 +272,8 @@ class _UnlockState extends State<Unlock> {
   }
 
   void _listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) {
-    purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) async {
+    // ignore: avoid_function_literals_in_foreach_calls
+    purchaseDetailsList.forEach((purchaseDetails) async {
       if (purchaseDetails.pendingCompletePurchase) {
         await _connection.completePurchase(purchaseDetails);
       }
@@ -293,7 +291,7 @@ class _UnlockState extends State<Unlock> {
           });
           await showDialog(
             context: context,
-            builder: (BuildContext context) => AlertDialog(
+            builder: (context) => AlertDialog(
               title: Text(AppLocalizations.of(context).badNews),
               content: Text('It seems there\'s an error with your purchase'),
               actions: [

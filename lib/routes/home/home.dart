@@ -1,15 +1,16 @@
 import 'dart:io';
 
 import 'package:app_review/app_review.dart';
-import 'package:click_to_chat/app_localizations.dart';
-import 'package:click_to_chat/routes/home/body.dart';
-import 'package:click_to_chat/routes/unlock.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mdi/mdi.dart';
 import 'package:package_info/package_info.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
+
+import '../../app_localizations.dart';
+import '../../routes/home/body.dart';
+import '../../routes/unlock.dart';
 
 class Home extends StatefulWidget {
   Home({Key key, this.title}) : super(key: key);
@@ -20,7 +21,7 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-enum PopupMenuItemEnum { about, sendFeedback }
+enum _PopupMenuItemEnum { about, sendFeedback }
 
 class _HomeState extends State<Home> {
   @override
@@ -37,13 +38,13 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         actions: [
           PopupMenuButton(
-            onSelected: (PopupMenuItemEnum choice) async {
+            onSelected: (choice) async {
               switch (choice) {
-                case PopupMenuItemEnum.sendFeedback:
+                case _PopupMenuItemEnum.sendFeedback:
                   await url_launcher.launch('mailto:feedback@lorenzopieri.dev');
                   break;
 
-                case PopupMenuItemEnum.about:
+                case _PopupMenuItemEnum.about:
                   var packageInfo = await PackageInfo.fromPlatform();
                   showAboutDialog(
                     context: context,
@@ -64,11 +65,11 @@ class _HomeState extends State<Home> {
             itemBuilder: (context) => [
               PopupMenuItem(
                 child: Text(AppLocalizations.of(context).sendFeedback),
-                value: PopupMenuItemEnum.sendFeedback,
+                value: _PopupMenuItemEnum.sendFeedback,
               ),
               PopupMenuItem(
                 child: Text(AppLocalizations.of(context).about),
-                value: PopupMenuItemEnum.about,
+                value: _PopupMenuItemEnum.about,
               ),
             ],
           ),
