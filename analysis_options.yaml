@@ -1,7 +1,9 @@
-# @format
-
-include: package:pedantic/analysis_options.yaml
+include: package:effective_dart/analysis_options.yaml
 
 analyzer:
   exclude:
     - lib/l10n/**
+
+linter:
+  rules:
+    lines_longer_than_80_chars: false

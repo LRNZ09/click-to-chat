@@ -1,12 +1,13 @@
 import 'dart:async';
 
-import 'package:click_to_chat/app.dart';
-import 'package:click_to_chat/debug.dart';
-import 'package:click_to_chat/sentry.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:wakelock/wakelock.dart';
+
+import 'app.dart';
+import 'debug.dart';
+import 'sentry.dart';
 
 void main() {
   // This captures errors reported by the Flutter framework.
@@ -65,7 +66,7 @@ void _onError(dynamic error, dynamic stackTrace) async {
     } else {
       print('Failed to report to Sentry.io: ${response.error}');
     }
-  } catch (sentryError) {
+  } on dynamic catch (sentryError) {
     print('Sending report to Sentry failed: $sentryError');
     print('Original error: $error');
   }

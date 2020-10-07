@@ -13,7 +13,7 @@ description: 'Click to Chat'
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.9.0+28
+version: 1.9.1+29
 
 environment:
   sdk: '>=2.2.2 <3.0.0'
@@ -39,6 +39,7 @@ dependencies:
   wakelock: ^0.1.4+2
 
 dev_dependencies:
+  effective_dart: ^1.2.4
   flutter_driver:
     sdk: flutter
   flutter_launcher_icons: ^0.7.4
@@ -46,7 +47,6 @@ dev_dependencies:
     sdk: flutter
   golden_toolkit: ^0.6.0
   intl_translation: ^0.17.9
-  pedantic: ^1.8.0
   test: ^1.15.4
 
 # For information on the generic Dart part of this file, see the
