@@ -1,0 +1,82 @@
+{
+    "@@x-loco-version": "1.0.25 20201015-1",
+    "@@locale": "en",
+    "@@last_modified": "2020-11-21T19:34:31+0100",
+    "@@author": "Lorenzo Pieri",
+    "about": "About",
+    "@about": {
+        "type": "text"
+    },
+    "appLegalese": "Made by LRNZ09",
+    "@appLegalese": {
+        "type": "text"
+    },
+    "appTitle": "Click to Chat",
+    "@appTitle": {
+        "type": "text"
+    },
+    "badNews": "Bad news",
+    "@badNews": {
+        "type": "text"
+    },
+    "buyMeACoffee": "Buy me a coffee",
+    "@buyMeACoffee": {
+        "type": "text"
+    },
+    "call": "Call",
+    "@call": {
+        "type": "text"
+    },
+    "close": "Close",
+    "@close": {
+        "type": "text"
+    },
+    "copy": "Copy",
+    "@copy": {
+        "type": "text"
+    },
+    "country": "Country",
+    "@country": {
+        "type": "text"
+    },
+    "delete": "Delete",
+    "@delete": {
+        "type": "text"
+    },
+    "homeOpenButton": "Open in WhatsApp",
+    "@homeOpenButton": {
+        "type": "text"
+    },
+    "notNow": "Not now",
+    "@notNow": {
+        "type": "text"
+    },
+    "phoneNumber": "Phone number",
+    "@phoneNumber": {
+        "type": "text"
+    },
+    "rate": "Rate",
+    "@rate": {
+        "type": "text"
+    },
+    "sendFeedback": "Send feedback",
+    "@sendFeedback": {
+        "type": "text"
+    },
+    "sendSmsMessage": "Send SMS message",
+    "@sendSmsMessage": {
+        "type": "text"
+    },
+    "share": "Share",
+    "@share": {
+        "type": "text"
+    },
+    "undo": "Undo",
+    "@undo": {
+        "type": "text"
+    },
+    "message": "Message",
+    "@message": {
+        "type": "text"
+    }
+}

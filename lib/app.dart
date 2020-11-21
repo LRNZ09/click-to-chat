@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'app_localizations.dart';
 import 'routes/home/home.dart';
 
 class App extends StatelessWidget {
@@ -30,7 +30,7 @@ class App extends StatelessWidget {
       home: Home(title: _title),
       localizationsDelegates: [
         // This is where all translations are defined, will be added later.
-        const AppLocalizationsDelegate(),
+        AppLocalizations.delegate,
         // Built-in delegate for the localisation of the Material widgets.
         GlobalMaterialLocalizations.delegate,
         // Built-in localisation for text direction (ltr or rtl).

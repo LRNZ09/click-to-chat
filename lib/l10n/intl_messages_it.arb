@@ -1,0 +1,101 @@
+{
+    "@@x-loco-version": "1.0.25 20201015-1",
+    "@@locale": "it",
+    "@@last_modified": "2020-11-21T19:34:31+0100",
+    "@@author": "Lorenzo Pieri",
+    "about": "A proposito",
+    "@about": {
+        "type": "text",
+        "source_text": "About"
+    },
+    "appLegalese": "Made by LRNZ09",
+    "@appLegalese": {
+        "type": "text",
+        "source_text": "Made by LRNZ09"
+    },
+    "appTitle": "Click to Chat",
+    "@appTitle": {
+        "type": "text",
+        "source_text": "Click to Chat"
+    },
+    "badNews": "Cattive notizie",
+    "@badNews": {
+        "type": "text",
+        "source_text": "Bad news"
+    },
+    "buyMeACoffee": "Offrimi un caffè",
+    "@buyMeACoffee": {
+        "type": "text",
+        "source_text": "Buy me a coffee"
+    },
+    "call": "Chiama",
+    "@call": {
+        "type": "text",
+        "source_text": "Call"
+    },
+    "close": "Chiudi",
+    "@close": {
+        "type": "text",
+        "source_text": "Close"
+    },
+    "copy": "Copia",
+    "@copy": {
+        "type": "text",
+        "source_text": "Copy"
+    },
+    "country": "Paese",
+    "@country": {
+        "type": "text",
+        "source_text": "Country"
+    },
+    "delete": "Elimina",
+    "@delete": {
+        "type": "text",
+        "source_text": "Delete"
+    },
+    "homeOpenButton": "Apri in WhatsApp",
+    "@homeOpenButton": {
+        "type": "text",
+        "source_text": "Open in WhatsApp"
+    },
+    "notNow": "Non adesso",
+    "@notNow": {
+        "type": "text",
+        "source_text": "Not now"
+    },
+    "phoneNumber": "Numero di telefono",
+    "@phoneNumber": {
+        "type": "text",
+        "source_text": "Phone number"
+    },
+    "rate": "Valuta",
+    "@rate": {
+        "type": "text",
+        "source_text": "Rate"
+    },
+    "sendFeedback": "Invia feedback",
+    "@sendFeedback": {
+        "type": "text",
+        "source_text": "Send feedback"
+    },
+    "sendSmsMessage": "Invia messaggio SMS",
+    "@sendSmsMessage": {
+        "type": "text",
+        "source_text": "Send SMS message"
+    },
+    "share": "Condividi",
+    "@share": {
+        "type": "text",
+        "source_text": "Share"
+    },
+    "undo": "Annulla",
+    "@undo": {
+        "type": "text",
+        "source_text": "Undo"
+    },
+    "message": "Messaggio",
+    "@message": {
+        "type": "text",
+        "source_text": "Message"
+    }
+}

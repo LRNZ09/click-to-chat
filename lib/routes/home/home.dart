@@ -3,12 +3,12 @@ import 'dart:io';
 import 'package:app_review/app_review.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mdi/mdi.dart';
 import 'package:package_info/package_info.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
-import '../../app_localizations.dart';
 import '../../routes/home/body.dart';
 import '../../routes/unlock.dart';
 
@@ -119,7 +119,7 @@ class _HomeState extends State<Home> {
           final route = MaterialPageRoute(builder: (context) => Unlock());
           await Navigator.push(context, route);
         },
-        tooltip: AppLocalizations.of(context).unlock,
+        tooltip: AppLocalizations.of(context).buyMeACoffee,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
