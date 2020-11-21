@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:mdi/mdi.dart';
 
-import '../app_localizations.dart';
 import '../debug.dart';
 import '../sentry.dart';
 

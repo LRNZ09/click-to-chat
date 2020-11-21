@@ -3,6 +3,7 @@ import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:mdi/mdi.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -10,8 +11,6 @@ import 'package:share/share.dart';
 import 'package:sim_info/sim_info.dart';
 import 'package:store_redirect/store_redirect.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
-
-import '../../app_localizations.dart';
 
 final countriesDio = Dio(
   BaseOptions(
@@ -21,7 +20,7 @@ final countriesDio = Dio(
 )..interceptors.add(
     DioCacheManager(
       CacheConfig(
-        defaultMaxStale: Duration(days: 14),
+        defaultMaxStale: Duration(days: 7),
       ),
     ).interceptor,
   );
@@ -75,6 +74,7 @@ class _BodyState extends State<Body> {
   Country _phoneNumberCountry;
 
   var _phoneNumber = '';
+  var _message = '';
 
   @override
   void initState() {
@@ -200,9 +200,8 @@ class _BodyState extends State<Body> {
     });
   }
 
-  void _onListTileTap(phoneNumber) async {
-    // TODO add text param 'whatsapp://send?phone=$phoneNumber&text=42'
-    var url = 'whatsapp://send?phone=$phoneNumber';
+  void _onListTileTap(String phoneNumber, [String message = '']) async {
+    var url = 'whatsapp://send?phone=$phoneNumber&text=$message';
 
     if (await url_launcher.canLaunch(url)) {
       await url_launcher.launch(url);
@@ -247,7 +246,7 @@ class _BodyState extends State<Body> {
 
   void _onButtonPressed() {
     var fullPhoneNumber = '${_phoneNumberCountry.callingCode}$_phoneNumber';
-    _onListTileTap(fullPhoneNumber);
+    _onListTileTap(fullPhoneNumber, _message);
   }
 
   void _copyPhoneNumber(String phoneNumber) async {
@@ -380,6 +379,18 @@ class _BodyState extends State<Body> {
                 onChanged: _onPhoneNumberChanged,
               ),
               SizedBox(
+                height: 16,
+              ),
+              TextField(
+                decoration: InputDecoration(
+                  filled: true,
+                  labelText: AppLocalizations.of(context).message,
+                  prefixIcon: Icon(Mdi.messageText),
+                ),
+                keyboardType: TextInputType.multiline,
+                onChanged: _onMessageChanged,
+              ),
+              SizedBox(
                 height: 24,
               ),
               RaisedButton.icon(
@@ -503,5 +514,11 @@ class _BodyState extends State<Body> {
         )
       ],
     );
+  }
+
+  void _onMessageChanged(String value) {
+    setState(() {
+      _message = value;
+    });
   }
 }
