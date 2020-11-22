@@ -296,7 +296,7 @@ class _UnlockState extends State<Unlock> {
               content: Text('It seems there\'s an error with your purchase'),
               actions: [
                 FlatButton(
-                  child: Text(AppLocalizations.of(context).close.toUpperCase()),
+                  child: Text(AppLocalizations.of(context).close),
                   onPressed: () {
                     Navigator.pop(context);
                   },
