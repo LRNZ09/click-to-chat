@@ -123,7 +123,7 @@ class _BodyState extends State<Body> {
             ),
             actions: [
               FlatButton(
-                child: Text(AppLocalizations.of(context).notNow.toUpperCase()),
+                child: Text(AppLocalizations.of(context).notNow),
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
@@ -381,14 +381,18 @@ class _BodyState extends State<Body> {
               SizedBox(
                 height: 16,
               ),
-              TextField(
-                decoration: InputDecoration(
-                  filled: true,
-                  labelText: AppLocalizations.of(context).message,
-                  prefixIcon: Icon(Mdi.messageText),
+              ConstrainedBox(
+                child: TextField(
+                  decoration: InputDecoration(
+                    filled: true,
+                    labelText: AppLocalizations.of(context).message,
+                    prefixIcon: Icon(Mdi.messageText),
+                  ),
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                  onChanged: _onMessageChanged,
                 ),
-                keyboardType: TextInputType.multiline,
-                onChanged: _onMessageChanged,
+                constraints: BoxConstraints(maxHeight: 120),
               ),
               SizedBox(
                 height: 24,
