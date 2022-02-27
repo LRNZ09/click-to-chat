@@ -1,8 +1,8 @@
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
-import 'package:mdi/mdi.dart';
 
 import 'package:click_to_chat/app.dart';
 import 'package:click_to_chat/routes/home/body.dart';
@@ -61,10 +61,10 @@ void main() {
       await tester.pumpWidget(App());
       await tester.pumpAndSettle();
 
-      expect(find.byIcon(Mdi.whatsapp), findsOneWidget);
-      expect(find.byIcon(Mdi.star), findsOneWidget);
-      expect(find.byIcon(Mdi.shareVariant), findsOneWidget);
-      expect(find.byIcon(Mdi.emoticonHappy), findsOneWidget);
+      expect(find.byIcon(Icons.whatsapp), findsOneWidget);
+      expect(find.byIcon(Icons.star), findsOneWidget);
+      expect(find.byIcon(Icons.share), findsOneWidget);
+      expect(find.byIcon(Icons.insert_emoticon), findsOneWidget);
     });
 
     testGoldens('goldens', (tester) async {

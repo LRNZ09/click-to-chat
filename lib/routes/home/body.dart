@@ -1,77 +1,44 @@
 import 'package:dio/dio.dart';
-import 'package:dio_http_cache/dio_http_cache.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
-import 'package:mdi/mdi.dart';
+
 import 'package:permission_handler/permission_handler.dart';
-import 'package:share/share.dart';
-import 'package:sim_info/sim_info.dart';
-import 'package:store_redirect/store_redirect.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
+
+import '../../utils/country.dart';
 
 final countriesDio = Dio(
   BaseOptions(
-    baseUrl: 'https://restcountries.eu/rest/v2',
+    baseUrl: 'https://restcountries.com/v3.1/',
     receiveTimeout: 5000,
   ),
-)..interceptors.add(
-    DioCacheManager(
-      CacheConfig(
-        defaultMaxStale: Duration(days: 7),
-      ),
-    ).interceptor,
-  );
-
-@immutable
-class Country {
-  final String alpha2Code;
-  final String callingCode;
-  final String nativeName;
-
-  Country({
-    this.alpha2Code,
-    this.callingCode,
-    this.nativeName,
-  });
-
-  factory Country.fromJson(Map<String, dynamic> json) {
-    return Country(
-      alpha2Code: json['alpha2Code'],
-      callingCode: json['callingCodes'][0],
-      nativeName: json['nativeName'],
-    );
-  }
-
-  String get emoji {
-    return alpha2Code.toUpperCase().replaceAllMapped(RegExp('.'),
-        (char) => String.fromCharCode(char[0].codeUnitAt(0) + 127397));
-  }
-
-  @override
-  int get hashCode => alpha2Code.hashCode;
-
-  @override
-  bool operator ==(dynamic other) =>
-      (other is Country && other.alpha2Code == alpha2Code);
-}
+);
+// ..interceptors.add(
+//     DioCacheManager(
+//       CacheConfig(
+//         defaultMaxStale: Duration(days: 7),
+//       ),
+//     ).interceptor,
+//   );
 
 class Body extends StatefulWidget {
+  const Body({Key? key}) : super(key: key);
+
   @override
   _BodyState createState() => _BodyState();
 }
 
 class _BodyState extends State<Body> {
-  static final _phoneNumberMaxLength = 16;
+  static const _phoneNumberMaxLength = 16;
 
   final _countriesCancelToken = CancelToken();
   final _phoneNumberSet = <String>{};
   final _phoneNumberDateTimeMap = {};
 
-  Future<Response> _countriesFuture;
-  Country _phoneNumberCountry;
+  late Future<Response> _countriesFuture;
+  Country? _phoneNumberCountry;
 
   var _phoneNumber = '';
   var _message = '';
@@ -83,9 +50,6 @@ class _BodyState extends State<Body> {
     _countriesFuture = countriesDio.get(
       '/all',
       cancelToken: _countriesCancelToken,
-      queryParameters: {
-        'fields': 'alpha2Code;callingCodes;nativeName',
-      },
     );
   }
 
@@ -109,7 +73,7 @@ class _BodyState extends State<Body> {
     final locale = Localizations.localeOf(context);
     var countryCode = locale.countryCode;
 
-    Map<String, dynamic> simCountryMap;
+    Map<String, dynamic>? simCountryMap;
     try {
       var shouldAskPermission = true;
 
@@ -118,18 +82,18 @@ class _BodyState extends State<Body> {
           barrierDismissible: false,
           context: context,
           builder: (context) => AlertDialog(
-            content: Text(
+            content: const Text(
               'Phone permission is required in order to get the country from your SIM card, otherwise the one of your locale will be used in its place',
             ),
             actions: [
               FlatButton(
-                child: Text(AppLocalizations.of(context).notNow),
+                child: Text(AppLocalizations.of(context)!.notNow),
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
               ),
               FlatButton(
-                child: Text('OK'),
+                child: const Text('OK'),
                 onPressed: () {
                   Navigator.pop(context, true);
                 },
@@ -147,8 +111,9 @@ class _BodyState extends State<Body> {
 
         final permission = await Permission.phone.request();
         if (permission.isGranted) {
-          final simCountryCode = await SimInfo.getIsoCountryCode;
-          if (simCountryCode.isNotEmpty) countryCode = simCountryCode;
+          // TODO: get sim country
+          // final simCountryCode = await SimInfo.getIsoCountryCode;
+          // if (simCountryCode.isNotEmpty) countryCode = simCountryCode;
         }
       }
 
@@ -156,24 +121,18 @@ class _BodyState extends State<Body> {
         final response = await countriesDio.get(
           '/lang/${locale.languageCode}',
           cancelToken: _countriesCancelToken,
-          queryParameters: {
-            'fields': 'alpha2Code;callingCodes;nativeName',
-          },
         );
         simCountryMap = response.data[0];
       } else {
         final response = await countriesDio.get(
           '/alpha/$countryCode',
           cancelToken: _countriesCancelToken,
-          queryParameters: {
-            'fields': 'alpha2Code;callingCodes;nativeName',
-          },
         );
-        simCountryMap = response.data;
+        simCountryMap = response.data[0];
       }
     } on dynamic {
       Scaffold.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text(
             'An error occurred while trying to get your country info',
           ),
@@ -182,9 +141,10 @@ class _BodyState extends State<Body> {
     }
 
     final simCountry = simCountryMap == null
-        ? Country(
-            alpha2Code: 'US',
+        ? const Country(
             callingCode: '1',
+            code: '840',
+            flag: '🇺🇸',
             nativeName: 'United States',
           )
         : Country.fromJson(simCountryMap);
@@ -214,27 +174,28 @@ class _BodyState extends State<Body> {
       await showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text(AppLocalizations.of(context).badNews),
-          content: Text(
+          title: Text(AppLocalizations.of(context)!.badNews),
+          content: const Text(
             'It seems you don\'t have WhatsApp installed, try installing it from the store.',
           ),
           actions: [
             FlatButton(
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
               onPressed: () {
                 Navigator.pop(context);
               },
             ),
             FlatButton(
-              child: Text('OK'),
+              child: const Text('OK'),
               onPressed: () async {
                 Navigator.pop(context);
 
                 try {
-                  await StoreRedirect.redirect(
-                    androidAppId: 'com.whatsapp',
-                    iOSAppId: '310633997',
-                  );
+                  // TODO: Add a redirect to the store
+                  // await StoreRedirect.redirect(
+                  //   androidAppId: 'com.whatsapp',
+                  //   iOSAppId: '310633997',
+                  // );
                 } on dynamic {}
               },
             ),
@@ -245,7 +206,7 @@ class _BodyState extends State<Body> {
   }
 
   void _onButtonPressed() {
-    var fullPhoneNumber = '${_phoneNumberCountry.callingCode}$_phoneNumber';
+    var fullPhoneNumber = '${_phoneNumberCountry?.callingCode}$_phoneNumber';
     _onListTileTap(fullPhoneNumber, _message);
   }
 
@@ -271,7 +232,7 @@ class _BodyState extends State<Body> {
     Scaffold.of(context).showSnackBar(
       SnackBar(
         action: SnackBarAction(
-          label: (AppLocalizations.of(context).undo).toUpperCase(),
+          label: (AppLocalizations.of(context)!.undo).toUpperCase(),
           onPressed: () {
             setState(() {
               _phoneNumberSet.add(phoneNumber);
@@ -288,18 +249,17 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: EdgeInsets.only(bottom: 240),
+      padding: const EdgeInsets.only(bottom: 240),
       children: [
         Padding(
-          padding: EdgeInsets.all(24),
+          padding: const EdgeInsets.all(24),
           child: Column(
             children: [
               FutureBuilder(
                 future: _countriesFuture,
-                // ignore: avoid_types_on_closure_parameters
                 builder: (context, AsyncSnapshot<Response> snapshot) {
                   var countries = [];
-                  if (snapshot.hasData) countries = snapshot.data.data;
+                  if (snapshot.hasData) countries = snapshot.data!.data;
 
                   var items = countries
                       .map((countryMap) => Country.fromJson(countryMap))
@@ -308,37 +268,33 @@ class _BodyState extends State<Body> {
                         (country) => DropdownMenuItem(
                           key: ValueKey(country),
                           value: country,
-                          child:
-                              Text('${country.emoji}  ${country.nativeName}'),
+                          child: Text('${country.flag}  ${country.nativeName}'),
                         ),
                       )
                       .toList();
 
                   return InputDecorator(
                     decoration: InputDecoration(
+                      errorText: snapshot.error?.toString(),
                       filled: true,
-                      prefixIcon: Icon(Mdi.flagVariant),
-                      labelText: AppLocalizations.of(context).country,
-                      suffixIcon: snapshot.hasError
-                          ? IconButton(
-                              icon: Icon(Mdi.alert),
-                              onPressed: () {
-                                setState(() {
-                                  _countriesFuture = countriesDio.get(
-                                    '/all',
-                                    cancelToken: _countriesCancelToken,
-                                    queryParameters: {
-                                      'fields':
-                                          'alpha2Code;callingCodes;nativeName',
-                                    },
-                                  );
-                                });
-                              },
-                              tooltip: ' Retry',
-                            )
-                          : Icon(
-                              snapshot.hasData ? Mdi.menuDown : Mdi.loading,
-                            ),
+                      prefixIcon: const Icon(Icons.flag),
+                      labelText: AppLocalizations.of(context)!.country,
+                      suffixIcon: snapshot.hasData
+                          ? const Icon(Icons.arrow_drop_down)
+                          : snapshot.hasError
+                              ? IconButton(
+                                  icon: const Icon(Icons.warning),
+                                  onPressed: () {
+                                    setState(() {
+                                      _countriesFuture = countriesDio.get(
+                                        '/all',
+                                        cancelToken: _countriesCancelToken,
+                                      );
+                                    });
+                                  },
+                                  tooltip: ' Retry',
+                                )
+                              : null,
                     ),
                     isEmpty: _phoneNumberCountry == null,
                     child: DropdownButtonHideUnderline(
@@ -347,7 +303,7 @@ class _BodyState extends State<Body> {
                         value: _phoneNumberCountry,
                         isDense: true,
                         isExpanded: true,
-                        onChanged: (value) {
+                        onChanged: (Country? value) {
                           setState(() {
                             _phoneNumberCountry = value;
                           });
@@ -358,48 +314,46 @@ class _BodyState extends State<Body> {
                   );
                 },
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               TextField(
+                maxLengthEnforcement: MaxLengthEnforcement.none,
                 decoration: InputDecoration(
-                  prefixText: _phoneNumberCountry != null
-                      ? '+${_phoneNumberCountry.callingCode} '
-                      : '+',
+                  prefixText: _phoneNumberCountry?.callingCode ?? '',
                   errorText: _phoneNumber.length > _phoneNumberMaxLength
                       ? 'Are you sure this phone number is correct?'
                       : null,
                   filled: true,
-                  labelText: AppLocalizations.of(context).phoneNumber,
-                  prefixIcon: Icon(Mdi.dialpad),
+                  labelText: AppLocalizations.of(context)!.phoneNumber,
+                  prefixIcon: const Icon(Icons.dialpad),
                 ),
                 keyboardType: TextInputType.phone,
                 maxLength: _phoneNumberMaxLength,
-                maxLengthEnforced: false,
                 onChanged: _onPhoneNumberChanged,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               ConstrainedBox(
                 child: TextField(
                   decoration: InputDecoration(
                     filled: true,
-                    labelText: AppLocalizations.of(context).message,
-                    prefixIcon: Icon(Mdi.messageText),
+                    labelText: AppLocalizations.of(context)!.message,
+                    prefixIcon: const Icon(Icons.message),
                   ),
                   keyboardType: TextInputType.multiline,
                   maxLines: null,
                   onChanged: _onMessageChanged,
                 ),
-                constraints: BoxConstraints(maxHeight: 120),
+                constraints: const BoxConstraints(maxHeight: 120),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 24,
               ),
-              RaisedButton.icon(
-                icon: Icon(Mdi.whatsapp),
-                label: Text(AppLocalizations.of(context).homeOpenButton),
+              ElevatedButton.icon(
+                icon: const Icon(Icons.whatsapp),
+                label: Text(AppLocalizations.of(context)!.homeOpenButton),
                 onPressed: _phoneNumber.isEmpty ? null : _onButtonPressed,
               ),
             ],
@@ -407,7 +361,7 @@ class _BodyState extends State<Body> {
         ),
         ListView.builder(
           shrinkWrap: true,
-          physics: ClampingScrollPhysics(),
+          physics: const ClampingScrollPhysics(),
           itemCount: _phoneNumberSet.length,
           itemBuilder: (context, index) {
             var reverseIndex = _phoneNumberSet.length - index - 1;
@@ -424,14 +378,14 @@ class _BodyState extends State<Body> {
               background: Container(
                 color: Colors.blue,
                 alignment: Alignment.centerLeft,
-                child: Icon(Mdi.contentCopy, color: Colors.white),
-                padding: EdgeInsets.only(left: 24),
+                child: const Icon(Icons.copy, color: Colors.white),
+                padding: const EdgeInsets.only(left: 24),
               ),
               secondaryBackground: Container(
                 color: Colors.red,
                 alignment: Alignment.centerRight,
-                child: Icon(Mdi.delete, color: Colors.white),
-                padding: EdgeInsets.only(right: 24),
+                child: const Icon(Icons.delete, color: Colors.white),
+                padding: const EdgeInsets.only(right: 24),
               ),
               onDismissed: (direction) {
                 _deletePhoneNumber(phoneNumber);
@@ -455,18 +409,19 @@ class _BodyState extends State<Body> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             ListTile(
-                              leading: Icon(Mdi.shareVariant),
-                              title: Text(AppLocalizations.of(context).share),
+                              leading: const Icon(Icons.share),
+                              title: Text(AppLocalizations.of(context)!.share),
                               onTap: () async {
                                 Navigator.pop(context);
 
                                 var url = 'https://wa.me/$phoneNumber';
-                                await Share.share(url);
+                                // TODO: Add share functionality
+                                // await Share.share(url);
                               },
                             ),
                             ListTile(
-                              leading: Icon(Mdi.phone),
-                              title: Text(AppLocalizations.of(context).call),
+                              leading: const Icon(Icons.phone),
+                              title: Text(AppLocalizations.of(context)!.call),
                               onTap: () async {
                                 Navigator.pop(context);
 
@@ -475,9 +430,9 @@ class _BodyState extends State<Body> {
                               },
                             ),
                             ListTile(
-                              leading: Icon(Mdi.message),
+                              leading: const Icon(Icons.message),
                               title: Text(
-                                AppLocalizations.of(context).sendSmsMessage,
+                                AppLocalizations.of(context)!.sendSmsMessage,
                               ),
                               onTap: () async {
                                 Navigator.pop(context);
@@ -487,8 +442,8 @@ class _BodyState extends State<Body> {
                               },
                             ),
                             ListTile(
-                              leading: Icon(Mdi.contentCopy),
-                              title: Text(AppLocalizations.of(context).copy),
+                              leading: const Icon(Icons.copy),
+                              title: Text(AppLocalizations.of(context)!.copy),
                               onTap: () {
                                 Navigator.pop(context);
 
@@ -496,8 +451,8 @@ class _BodyState extends State<Body> {
                               },
                             ),
                             ListTile(
-                              leading: Icon(Mdi.delete),
-                              title: Text(AppLocalizations.of(context).delete),
+                              leading: const Icon(Icons.delete),
+                              title: Text(AppLocalizations.of(context)!.delete),
                               onTap: () {
                                 Navigator.pop(context);
 

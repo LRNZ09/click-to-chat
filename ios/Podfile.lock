@@ -2,84 +2,45 @@ PODS:
   - app_review (1.0.1):
     - Flutter
   - Flutter (1.0.0)
-  - FMDB (2.7.5):
-    - FMDB/standard (= 2.7.5)
-  - FMDB/standard (2.7.5)
-  - in_app_purchase (0.0.1):
+  - in_app_purchase_storekit (0.0.1):
     - Flutter
   - package_info (0.0.1):
     - Flutter
-  - "permission_handler (5.0.1+1)":
+  - permission_handler_apple (9.0.2):
     - Flutter
-  - share (0.0.1):
-    - Flutter
-  - sim_info (0.0.1):
-    - Flutter
-  - sqflite (0.0.1):
-    - Flutter
-    - FMDB (~> 2.7.2)
-  - store_redirect (0.0.1):
-    - Flutter
-  - url_launcher (0.0.1):
-    - Flutter
-  - wakelock (0.0.1):
+  - url_launcher_ios (0.0.1):
     - Flutter
 
 DEPENDENCIES:
   - app_review (from `.symlinks/plugins/app_review/ios`)
   - Flutter (from `Flutter`)
-  - in_app_purchase (from `.symlinks/plugins/in_app_purchase/ios`)
+  - in_app_purchase_storekit (from `.symlinks/plugins/in_app_purchase_storekit/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
-  - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
-  - share (from `.symlinks/plugins/share/ios`)
-  - sim_info (from `.symlinks/plugins/sim_info/ios`)
-  - sqflite (from `.symlinks/plugins/sqflite/ios`)
-  - store_redirect (from `.symlinks/plugins/store_redirect/ios`)
-  - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
-  - wakelock (from `.symlinks/plugins/wakelock/ios`)
-
-SPEC REPOS:
-  trunk:
-    - FMDB
+  - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
+  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
 
 EXTERNAL SOURCES:
   app_review:
     :path: ".symlinks/plugins/app_review/ios"
   Flutter:
     :path: Flutter
-  in_app_purchase:
-    :path: ".symlinks/plugins/in_app_purchase/ios"
+  in_app_purchase_storekit:
+    :path: ".symlinks/plugins/in_app_purchase_storekit/ios"
   package_info:
     :path: ".symlinks/plugins/package_info/ios"
-  permission_handler:
-    :path: ".symlinks/plugins/permission_handler/ios"
-  share:
-    :path: ".symlinks/plugins/share/ios"
-  sim_info:
-    :path: ".symlinks/plugins/sim_info/ios"
-  sqflite:
-    :path: ".symlinks/plugins/sqflite/ios"
-  store_redirect:
-    :path: ".symlinks/plugins/store_redirect/ios"
-  url_launcher:
-    :path: ".symlinks/plugins/url_launcher/ios"
-  wakelock:
-    :path: ".symlinks/plugins/wakelock/ios"
+  permission_handler_apple:
+    :path: ".symlinks/plugins/permission_handler_apple/ios"
+  url_launcher_ios:
+    :path: ".symlinks/plugins/url_launcher_ios/ios"
 
 SPEC CHECKSUMS:
   app_review: 6f51001269c59a2f4a5b5ae68b7d106401152764
-  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  in_app_purchase: 3e2155afa9d03d4fa32d9e62d567885080ce97d6
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  in_app_purchase_storekit: 6dec89fe3b9698847ed4aaf65fde6c17491620ad
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
-  permission_handler: eac8e15b4a1a3fba55b761d19f3f4e6b005d15b6
-  share: 0b2c3e82132f5888bccca3351c504d0003b3b410
-  sim_info: 9d8750399533a8eb626fbb7f6fc0776b154de2a6
-  sqflite: 4001a31ff81d210346b500c55b17f4d6c7589dd0
-  store_redirect: 2977747cf81689a39bd62c248c2deacb7a0d131e
-  url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
-  wakelock: 0d4a70faf8950410735e3f61fb15d517c8a6efc4
+  permission_handler_apple: d21b38e1a4b2e041c63af9568f9165e114e507a6
+  url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de
 
-PODFILE CHECKSUM: f57c6a8ab593910b453d3da49b877544b4824a02
+PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
 
-COCOAPODS: 1.10.0
+COCOAPODS: 1.11.2

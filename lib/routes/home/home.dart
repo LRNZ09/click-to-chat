@@ -1,19 +1,16 @@
 import 'dart:io';
 
 import 'package:app_review/app_review.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:mdi/mdi.dart';
-import 'package:package_info/package_info.dart';
-import 'package:share/share.dart';
+
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
 import '../../routes/home/body.dart';
 import '../../routes/unlock.dart';
 
 class Home extends StatefulWidget {
-  Home({Key key, this.title}) : super(key: key);
+  const Home({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -29,9 +26,9 @@ class _HomeState extends State<Home> {
     final title = Text(
       widget.title,
       // Provide a Key to this specific Text widget. This allows
-      // identifing the widget from inside the test suite,
+      // identifying the widget from inside the test suite,
       // and reading the text.
-      key: Key('title'),
+      key: const Key('title'),
     );
 
     return Scaffold(
@@ -45,7 +42,6 @@ class _HomeState extends State<Home> {
                   break;
 
                 case _PopupMenuItemEnum.about:
-                  var packageInfo = await PackageInfo.fromPlatform();
                   showAboutDialog(
                     context: context,
                     applicationIcon: Image.asset(
@@ -54,21 +50,23 @@ class _HomeState extends State<Home> {
                       width: 52,
                     ),
                     applicationName: widget.title,
-                    applicationVersion:
-                        'Version ${packageInfo.version} build ${packageInfo.buildNumber}',
+                    applicationVersion: '42',
+                    // TODO: Get version from package info
+                    // applicationVersion:
+                    //     'Version ${packageInfo.version} build ${packageInfo.buildNumber}',
                     applicationLegalese:
-                        AppLocalizations.of(context).appLegalese,
+                        AppLocalizations.of(context)!.appLegalese,
                   );
                   break;
               }
             },
             itemBuilder: (context) => [
               PopupMenuItem(
-                child: Text(AppLocalizations.of(context).sendFeedback),
+                child: Text(AppLocalizations.of(context)!.sendFeedback),
                 value: _PopupMenuItemEnum.sendFeedback,
               ),
               PopupMenuItem(
-                child: Text(AppLocalizations.of(context).about),
+                child: Text(AppLocalizations.of(context)!.about),
                 value: _PopupMenuItemEnum.about,
               ),
             ],
@@ -86,14 +84,14 @@ class _HomeState extends State<Home> {
         child: Row(
           children: [
             IconButton(
-              icon: Icon(Mdi.star),
+              icon: const Icon(Icons.star),
               onPressed: () async {
                 await AppReview.requestReview;
               },
-              tooltip: AppLocalizations.of(context).rate,
+              tooltip: AppLocalizations.of(context)!.rate,
             ),
             IconButton(
-              icon: Icon(Mdi.shareVariant),
+              icon: const Icon(Icons.share),
               onPressed: () async {
                 var url;
 
@@ -104,22 +102,23 @@ class _HomeState extends State<Home> {
                   url = 'https://apps.apple.com/app/id1496675283';
                 }
 
-                if (url != null) await Share.share(url, subject: widget.title);
+                // TODO: Add share functionality
+                // if (url != null) await Share.share(url, subject: widget.title);
               },
-              tooltip: AppLocalizations.of(context).share,
+              tooltip: AppLocalizations.of(context)!.share,
             ),
           ],
         ),
         notchMargin: 8,
-        shape: CircularNotchedRectangle(),
+        shape: const CircularNotchedRectangle(),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Mdi.emoticonHappy),
+        child: const Icon(Icons.insert_emoticon),
         onPressed: () async {
           final route = MaterialPageRoute(builder: (context) => Unlock());
           await Navigator.push(context, route);
         },
-        tooltip: AppLocalizations.of(context).buyMeACoffee,
+        tooltip: AppLocalizations.of(context)!.buyMeACoffee,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );

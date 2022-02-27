@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'routes/home/home.dart';
 
 class App extends StatelessWidget {
-  static final _title = 'Click to Chat';
+  static const _title = 'Click to Chat';
+
+  const App({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final primarySwatch = Colors.green;
-    final darkAccentColor = Color.fromRGBO(37, 211, 102, 1);
+    const primarySwatch = Colors.green;
+    // const darkAccentColor = Color.fromRGBO(37, 211, 102, 1);
 
     final theme = ThemeData(
       brightness: Brightness.light,
@@ -21,25 +22,25 @@ class App extends StatelessWidget {
     final darkTheme = ThemeData(
       brightness: Brightness.dark,
       primarySwatch: primarySwatch,
-      accentColor: darkAccentColor,
+      // accentColor: darkAccentColor,
     );
 
     return MaterialApp(
       darkTheme: darkTheme,
       debugShowCheckedModeBanner: false,
-      home: Home(title: _title),
-      localizationsDelegates: [
+      home: const Home(title: _title),
+      localizationsDelegates: const [
         // This is where all translations are defined, will be added later.
         AppLocalizations.delegate,
-        // Built-in delegate for the localisation of the Material widgets.
+        // Built-in delegate for the localization of the Material widgets.
         GlobalMaterialLocalizations.delegate,
-        // Built-in localisation for text direction (ltr or rtl).
+        // Built-in localization for text direction (ltr or rtl).
         GlobalWidgetsLocalizations.delegate,
-        // Built-in delegate for the localisation of the Cupertino widgets.
+        // Built-in delegate for the localization of the Cupertino widgets.
         GlobalCupertinoLocalizations.delegate,
       ],
       // Make sure you're not using the title property!
-      onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
+      onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
       supportedLocales: const [
         Locale('en', 'US'),
         Locale('it', 'IT'),

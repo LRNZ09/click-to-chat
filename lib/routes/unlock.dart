@@ -3,10 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:mdi/mdi.dart';
-
-import '../debug.dart';
-import '../sentry.dart';
 
 const _kProductsFallbackData = {
   'coffee': {
@@ -19,40 +15,40 @@ const _kProductsFallbackData = {
 final _kProductIds = _kProductsFallbackData.keys.toSet();
 
 class Unlock extends StatefulWidget {
+  const Unlock({Key? key}) : super(key: key);
+
   @override
   _UnlockState createState() => _UnlockState();
 }
 
 class _UnlockState extends State<Unlock> {
-  final InAppPurchaseConnection _connection = InAppPurchaseConnection.instance;
-
-  StreamSubscription<List<PurchaseDetails>> _subscription;
+  late StreamSubscription<List<PurchaseDetails>> _subscription;
   List<ProductDetails> _products = [];
   List<PurchaseDetails> _purchases = [];
   bool _isAvailable = false;
   bool _purchasePending = false;
   bool _loading = true;
-  String _queryProductError;
+  late String _queryProductError;
 
   @override
   void initState() {
     super.initState();
 
-    _subscription = _connection.purchaseUpdatedStream.listen(
+    _subscription = InAppPurchase.instance.purchaseStream.listen(
       _listenToPurchaseUpdated,
       onDone: () {
         _subscription.cancel();
       },
-      onError: (error) {
-        sentry.captureException(exception: error);
-      },
+      // onError: (error) {
+      //   sentry.captureException(exception: error);
+      // },
     );
 
     _initInAppPurchasesState();
   }
 
   Future<void> _initInAppPurchasesState() async {
-    final isAvailable = await _connection.isAvailable();
+    final isAvailable = await InAppPurchase.instance.isAvailable();
 
     if (!isAvailable) {
       setState(() {
@@ -66,11 +62,11 @@ class _UnlockState extends State<Unlock> {
     }
 
     final productDetailResponse =
-        await _connection.queryProductDetails(_kProductIds);
+        await InAppPurchase.instance.queryProductDetails(_kProductIds);
 
     if (productDetailResponse.productDetails.isEmpty) {
       setState(() {
-        _queryProductError = productDetailResponse.error?.message;
+        _queryProductError = productDetailResponse.error?.message ?? '';
         _isAvailable = isAvailable;
         _products = productDetailResponse.productDetails;
         // _products = productDetailResponse.notFoundIDs
@@ -91,29 +87,7 @@ class _UnlockState extends State<Unlock> {
       return;
     }
 
-    final purchaseResponse = await _connection.queryPastPurchases();
-
-    if (purchaseResponse.error != null) {
-      // TODO handle query past purchase error...
-      return;
-    }
-
-    final verifiedPurchases = <PurchaseDetails>[];
-    for (final purchase in purchaseResponse.pastPurchases) {
-      final isValid = _verifyPurchase(purchase);
-      if (isValid) {
-        verifiedPurchases.add(purchase);
-      }
-    }
-
-    setState(() {
-      _isAvailable = isAvailable;
-      _products = productDetailResponse.productDetails;
-      _purchases = verifiedPurchases;
-      // _notFoundIds = productDetailResponse.notFoundIDs;
-      _purchasePending = false;
-      _loading = false;
-    });
+    await InAppPurchase.instance.restorePurchases();
   }
 
   @override
@@ -135,7 +109,8 @@ class _UnlockState extends State<Unlock> {
       );
     } else {
       var children = [_buildProductList()];
-      if (isInDebugMode) children.insert(0, _buildConnectionCheckTile());
+      // TODO: restore the following code
+      // if (isInDebugMode) children.insert(0, _buildConnectionCheckTile());
 
       stack.add(
         ListView(
@@ -147,10 +122,10 @@ class _UnlockState extends State<Unlock> {
     if (_purchasePending) {
       stack.add(
         Stack(
-          children: [
+          children: const [
             Opacity(
               opacity: 0.3,
-              child: const ModalBarrier(dismissible: false, color: Colors.grey),
+              child: ModalBarrier(dismissible: false, color: Colors.grey),
             ),
             Center(
               child: CircularProgressIndicator(),
@@ -170,12 +145,12 @@ class _UnlockState extends State<Unlock> {
 
   Widget _buildConnectionCheckTile() {
     if (_loading) {
-      return Card(child: ListTile(title: const Text('Trying to connect...')));
+      return const Card(child: ListTile(title: Text('Trying to connect...')));
     }
 
     final Widget storeHeader = ListTile(
       leading: Icon(
-        _isAvailable ? Mdi.check : Mdi.close,
+        _isAvailable ? Icons.check : Icons.close,
         color: _isAvailable ? Colors.green : Colors.red,
       ),
       title: Text(
@@ -187,15 +162,15 @@ class _UnlockState extends State<Unlock> {
 
     if (!_isAvailable) {
       children.addAll([
-        Divider(),
-        ListTile(
+        const Divider(),
+        const ListTile(
           title: Text(
             'Not connected',
             style: TextStyle(
               color: Colors.red,
             ),
           ),
-          subtitle: const Text(
+          subtitle: Text(
               'Unable to connect to the payments processor. Has this app been configured correctly? See the example README for instructions.'),
         ),
       ]);
@@ -205,7 +180,7 @@ class _UnlockState extends State<Unlock> {
 
   Widget _buildProductList() {
     if (_loading) {
-      return Card(
+      return const Card(
         child: ListTile(
           leading: CircularProgressIndicator(),
           title: Text('Fetching products...'),
@@ -214,7 +189,7 @@ class _UnlockState extends State<Unlock> {
     }
 
     if (!_isAvailable) {
-      return Card(
+      return const Card(
         child: ListTile(
           title: Text('Cannot connect to the store'),
         ),
@@ -223,7 +198,7 @@ class _UnlockState extends State<Unlock> {
 
     final purchases = Map.fromEntries(_purchases.map((purchase) {
       if (purchase.pendingCompletePurchase) {
-        _connection.completePurchase(purchase);
+        InAppPurchase.instance.completePurchase(purchase);
       }
 
       return MapEntry<String, PurchaseDetails>(purchase.productID, purchase);
@@ -232,13 +207,8 @@ class _UnlockState extends State<Unlock> {
     final productList = _products
         .map(
           (productDetails) => ListTile(
-            title: Text(
-              '${productDetails.title ?? _kProductsFallbackData[productDetails.id]['title']} ${_kProductsFallbackData[productDetails.id]['emoji']}',
-            ),
-            subtitle: Text(
-              productDetails.description ??
-                  _kProductsFallbackData[productDetails.id]['description'],
-            ),
+            title: Text(productDetails.title),
+            subtitle: Text(productDetails.description),
             trailing: purchases[productDetails.id] == null
                 ? FlatButton(
                     child: Text(productDetails.price),
@@ -247,15 +217,15 @@ class _UnlockState extends State<Unlock> {
                     onPressed: () {
                       final purchaseParam = PurchaseParam(
                         productDetails: productDetails,
-                        sandboxTesting: isInDebugMode,
+                        // sandboxTesting: isInDebugMode,
                       );
 
-                      _connection.buyConsumable(
+                      InAppPurchase.instance.buyConsumable(
                         purchaseParam: purchaseParam,
                       );
                     },
                   )
-                : Icon(Mdi.check),
+                : const Icon(Icons.check),
           ),
         )
         .toList();
@@ -265,17 +235,11 @@ class _UnlockState extends State<Unlock> {
     );
   }
 
-  bool _verifyPurchase(PurchaseDetails purchaseDetails) {
-    // IMPORTANT!! Always verify a purchase before delivering the product.
-    // For the purpose of an example, we directly return true.
-    return purchaseDetails.verificationData.serverVerificationData != null;
-  }
-
   void _listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) {
     // ignore: avoid_function_literals_in_foreach_calls
     purchaseDetailsList.forEach((purchaseDetails) async {
       if (purchaseDetails.pendingCompletePurchase) {
-        await _connection.completePurchase(purchaseDetails);
+        await InAppPurchase.instance.completePurchase(purchaseDetails);
       }
 
       switch (purchaseDetails.status) {
@@ -292,11 +256,12 @@ class _UnlockState extends State<Unlock> {
           await showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              title: Text(AppLocalizations.of(context).badNews),
-              content: Text('It seems there\'s an error with your purchase'),
+              title: Text(AppLocalizations.of(context)!.badNews),
+              content:
+                  const Text('It seems there\'s an error with your purchase'),
               actions: [
-                FlatButton(
-                  child: Text(AppLocalizations.of(context).close),
+                TextButton(
+                  child: Text(AppLocalizations.of(context)!.close),
                   onPressed: () {
                     Navigator.pop(context);
                   },
@@ -307,13 +272,18 @@ class _UnlockState extends State<Unlock> {
           return;
 
         case PurchaseStatus.purchased:
-          final isValid = _verifyPurchase(purchaseDetails);
-          if (isValid) {
-            setState(() {
-              _purchases.add(purchaseDetails);
-              _purchasePending = false;
-            });
-          }
+          setState(() {
+            _purchases.add(purchaseDetails);
+            _purchasePending = false;
+          });
+          return;
+
+        case PurchaseStatus.restored:
+          // TODO: Handle this case.
+          break;
+        case PurchaseStatus.canceled:
+          // TODO: Handle this case.
+          break;
       }
     });
   }
