@@ -1,84 +1,79 @@
-import 'package:dio/adapter.dart';
-import 'package:dio/dio.dart';
+import 'package:charlatan/charlatan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:golden_toolkit/golden_toolkit.dart';
 
 import 'package:click_to_chat/app.dart';
 import 'package:click_to_chat/routes/home/body.dart';
 
-class MockHttpClientAdapter extends HttpClientAdapter {
-  final _adapter = DefaultHttpClientAdapter();
+final testCountry = {
+  "alpha2Code": "TC",
+  "callingCodes": ["42"],
+  "nativeName": "Test Country"
+};
 
-  @override
-  Future<ResponseBody> fetch(
-    RequestOptions options,
-    Stream<List<int>> requestStream,
-    Future cancelFuture,
-  ) async {
-    switch (options.path) {
-      case '/all':
-        return ResponseBody.fromString(
-          '[{"alpha2Code":"US","callingCodes":["1"],"nativeName":"United States"}]',
-          200,
-          headers: {
-            Headers.contentTypeHeader: [Headers.jsonContentType],
-          },
-        );
-      case '/alpha/US':
-        return ResponseBody.fromString(
-          '{"alpha2Code":"US","callingCodes":["1"],"nativeName":"United States"}',
-          200,
-          headers: {
-            Headers.contentTypeHeader: [Headers.jsonContentType],
-          },
-        );
-      default:
-        return ResponseBody.fromString('', 204);
-    }
-  }
-
-  @override
-  void close({bool force = false}) {
-    _adapter.close(force: force);
-  }
-}
+final charlatan = Charlatan()
+  ..whenGet(
+    '/all',
+    (req) => [testCountry],
+  )
+  ..whenGet(
+    '/alpha/TC',
+    (request) => testCountry,
+  );
 
 void main() {
   setUpAll(() {
-    countriesDio.httpClientAdapter = MockHttpClientAdapter();
+    countriesDio.httpClientAdapter = charlatan.toFakeHttpClientAdapter();
   });
 
   group('App', () {
-    testWidgets('texts', (tester) async {
-      await tester.pumpWidget(App());
+    testWidgets('should display the title', (tester) async {
+      // load the PlantsApp widget
+      await tester.pumpWidget(const App());
+
+      // wait for data to load
+      await tester.pumpAndSettle();
+
+      // Find widget with 'Click to Chat' text
+      final finder = find.text('Click to Chat');
+
+      // Check if widget is displayed
+      expect(finder, findsOneWidget);
+    });
+
+    testWidgets('should display country placeholder', (tester) async {
+      await tester.pumpWidget(const App());
       await tester.pumpAndSettle();
 
       expect(find.text('Country'), findsOneWidget);
+    });
+
+    testWidgets('should display phone number placeholder', (tester) async {
+      await tester.pumpWidget(const App());
+      await tester.pumpAndSettle();
+
       expect(find.text('Phone number'), findsOneWidget);
     });
-    testWidgets('icons', (tester) async {
-      await tester.pumpWidget(App());
+
+    testWidgets('should display WhatsApp icon', (tester) async {
+      await tester.pumpWidget(const App());
       await tester.pumpAndSettle();
 
       expect(find.byIcon(Icons.whatsapp), findsOneWidget);
-      expect(find.byIcon(Icons.star), findsOneWidget);
-      expect(find.byIcon(Icons.share), findsOneWidget);
-      expect(find.byIcon(Icons.insert_emoticon), findsOneWidget);
     });
 
-    testGoldens('goldens', (tester) async {
-      await tester.pumpWidget(App());
+    testWidgets('should display star icon', (tester) async {
+      await tester.pumpWidget(const App());
       await tester.pumpAndSettle();
 
-      await multiScreenGolden(tester, 'app', devices: [
-        Device.phone,
-        Device.phone.dark(),
-        Device.tabletPortrait,
-        Device.tabletPortrait.dark(),
-        Device.tabletLandscape,
-        Device.tabletLandscape.dark(),
-      ]);
-    }, skip: true); // ! FIXME failing on Codemagic
+      expect(find.byIcon(Icons.star), findsOneWidget);
+    });
+
+    testWidgets('should display share icon', (tester) async {
+      await tester.pumpWidget(const App());
+      await tester.pumpAndSettle();
+
+      expect(find.byIcon(Icons.share), findsOneWidget);
+    });
   });
 }
