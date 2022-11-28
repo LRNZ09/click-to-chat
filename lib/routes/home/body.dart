@@ -130,8 +130,8 @@ class _BodyState extends State<Body> {
         );
         simCountryMap = response.data[0];
       }
-    } on dynamic {
-      Scaffold.of(context).showSnackBar(
+    } on Exception {
+      ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
             'An error occurred while trying to get your country info',
@@ -215,7 +215,7 @@ class _BodyState extends State<Body> {
     var data = ClipboardData(text: text);
     await Clipboard.setData(data);
 
-    Scaffold.of(context).showSnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
           'Phone number $text copied to clipboard',
@@ -229,7 +229,7 @@ class _BodyState extends State<Body> {
       _phoneNumberSet.remove(phoneNumber);
     });
 
-    Scaffold.of(context).showSnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         action: SnackBarAction(
           label: (AppLocalizations.of(context)!.undo).toUpperCase(),
