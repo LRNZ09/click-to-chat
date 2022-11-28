@@ -7,7 +7,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
 import '../../routes/home/body.dart';
-import '../../routes/unlock.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key, required this.title}) : super(key: key);
@@ -111,14 +110,6 @@ class _HomeState extends State<Home> {
         ),
         notchMargin: 8,
         shape: const CircularNotchedRectangle(),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.insert_emoticon),
-        onPressed: () async {
-          final route = MaterialPageRoute(builder: (context) => Unlock());
-          await Navigator.push(context, route);
-        },
-        tooltip: AppLocalizations.of(context)!.buyMeACoffee,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
