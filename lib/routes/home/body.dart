@@ -86,13 +86,13 @@ class _BodyState extends State<Body> {
               'Phone permission is required in order to get the country from your SIM card, otherwise the one of your locale will be used in its place',
             ),
             actions: [
-              FlatButton(
+              TextButton(
                 child: Text(AppLocalizations.of(context)!.notNow),
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
               ),
-              FlatButton(
+              TextButton(
                 child: const Text('OK'),
                 onPressed: () {
                   Navigator.pop(context, true);
@@ -179,13 +179,13 @@ class _BodyState extends State<Body> {
             'It seems you don\'t have WhatsApp installed, try installing it from the store.',
           ),
           actions: [
-            FlatButton(
+            TextButton(
               child: const Text('Cancel'),
               onPressed: () {
                 Navigator.pop(context);
               },
             ),
-            FlatButton(
+            TextButton(
               child: const Text('OK'),
               onPressed: () async {
                 Navigator.pop(context);
